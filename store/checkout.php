@@ -80,45 +80,62 @@ require __DIR__ . '/partials/header.php';
 ?>
 <div class="min-h-screen">
 <main class="store-container px-5 pb-10 pt-5 md:px-7 lg:px-8">
-    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="subtle-link text-sm font-semibold">Kembali ke detail produk</a>
+    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="subtle-link text-sm font-semibold">← Kembali ke detail produk</a>
 
-    <section class="mt-4 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+    <section class="checkout-shell mt-4 xl:grid-cols-[0.95fr_1.05fr]">
         <div class="section-card interactive-panel p-5 md:p-7">
             <p class="eyebrow text-[11px] font-semibold">Checkout summary</p>
-            <h1 class="title-display mt-4 text-[34px] leading-[0.95] text-[#171411] md:text-[50px]">Review pesananmu sebelum lanjut ke pembayaran.</h1>
-            <p class="store-muted mt-4 text-sm leading-7">Semua data sudah kami siapkan. Lanjutkan ke invoice untuk scan QRIS dan pantau status transaksi.</p>
+            <h1 class="title-display mt-4 text-[34px] leading-[0.95] text-slate-950 md:text-[50px]">Review pesananmu sebelum masuk ke halaman pembayaran.</h1>
+            <p class="store-muted mt-4 text-sm leading-7">Halaman ini dibuat untuk menenangkan user: semua data penting diringkas dulu sebelum scan QRIS.</p>
 
             <div class="store-line mt-6 space-y-4 border-t pt-6">
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Produk</div>
-                        <div class="mt-2 text-xl font-semibold text-[#171411]"><?= e($product['name']) ?></div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-slate-500">Produk</div>
+                        <div class="mt-2 text-xl font-semibold text-slate-950"><?= e($product['name']) ?></div>
                     </div>
                     <div class="store-chip px-4 py-2 text-xs font-semibold"><?= e($product['badge'] ?: 'Ready') ?></div>
                 </div>
                 <div class="grid gap-3 sm:grid-cols-2">
                     <div class="info-block p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Harga produk</div>
-                        <div class="mt-2 text-2xl font-semibold text-[#171411]"><?= e(money($product['price'])) ?></div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-slate-500">Harga produk</div>
+                        <div class="mt-2 text-2xl font-semibold text-slate-950"><?= e(money($product['price'])) ?></div>
                     </div>
                     <div class="info-block p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Metode</div>
-                        <div class="mt-2 text-2xl font-semibold text-[#171411]">QRIS</div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-slate-500">Metode</div>
+                        <div class="mt-2 text-2xl font-semibold text-slate-950">QRIS</div>
                     </div>
                 </div>
                 <div class="info-block p-4">
-                    <div class="text-sm font-semibold text-[#171411]"><?= e($customerName) ?></div>
+                    <div class="text-sm font-semibold text-slate-950"><?= e($customerName) ?></div>
                     <div class="store-muted mt-1 text-sm"><?= e($customerEmail) ?></div>
                     <div class="store-muted mt-1 text-sm"><?= e($customerWhatsapp) ?></div>
                     <div class="store-muted mt-2 text-sm">Akun/UID: <?= e($customerAccount) ?></div>
+                </div>
+                <div class="info-block p-5">
+                    <div class="text-xs uppercase tracking-[0.18em] text-slate-500">Setelah ini apa?</div>
+                    <div class="step-list mt-4">
+                        <div class="step-item">
+                            <span class="step-index">1</span>
+                            <div class="text-sm text-slate-700">Buka halaman invoice.</div>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-index">2</span>
+                            <div class="text-sm text-slate-700">Scan QRIS sesuai nominal yang muncul.</div>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-index">3</span>
+                            <div class="text-sm text-slate-700">Refresh status sampai pembayaran terdeteksi.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="section-card interactive-panel p-5 md:p-7">
             <p class="eyebrow text-[11px] font-semibold">Payment status</p>
-            <h2 class="mt-3 text-2xl font-semibold text-[#171411]">QRISify QRIS</h2>
-            <div class="mt-4 rounded-[24px] <?= ($qrisifyResponse['success'] ?? false) ? 'bg-[#171411] text-[#f8f4ed]' : 'bg-white/70 text-[#171411]' ?> p-4 text-sm leading-6">
+            <h2 class="mt-3 text-2xl font-semibold text-slate-950">Pembayaran QRIS</h2>
+            <div class="status-panel mt-4 <?= ($qrisifyResponse['success'] ?? false) ? 'status-panel-success' : 'status-panel-neutral' ?> text-sm leading-6">
                 <?php if ($createdOrderCode): ?>
                     Order berhasil dibuat dengan kode <strong><?= e($createdOrderCode) ?></strong>.
                     <?php if ($qrisifyResponse && !($qrisifyResponse['success'] ?? false)): ?>
@@ -135,6 +152,10 @@ require __DIR__ . '/partials/header.php';
                 <div class="grid gap-3">
                     <a href="<?= e(route_url('invoice.php?code=' . urlencode($createdOrderCode ?: ('DEMO-' . $product['id'])))) ?>" class="btn-primary w-full px-4 py-3 text-sm font-semibold">Buka invoice pembayaran</a>
                     <a href="<?= e(route_url()) ?>" class="btn-secondary w-full px-4 py-3 text-sm font-semibold">Kembali ke katalog</a>
+                </div>
+                <div class="info-block mt-4 p-4 text-sm">
+                    <div class="font-semibold text-slate-950">Kenapa ini lebih mudah dipakai?</div>
+                    <div class="store-muted mt-2 leading-7">User sekarang dapat ringkasan yang lebih jelas, CTA utama lebih tegas, dan tahu harus lanjut ke mana tanpa mikir lagi.</div>
                 </div>
             </div>
         </div>

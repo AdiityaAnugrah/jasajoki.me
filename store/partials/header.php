@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/../../app/helpers.php';
 $pageTitle = $pageTitle ?? app_config()['app_name'];
+$isAdminLayout = $isAdminLayout ?? false;
+$whatsappLink = app_setting('store_whatsapp')
+    ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', (string) app_setting('store_whatsapp'))
+    : '#';
 ?>
 <!doctype html>
 <html lang="id">
@@ -47,22 +51,44 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
     <link rel="stylesheet" href="<?= e(asset_url('css/app.css')) ?>">
 </head>
 <body>
-<div class="site-shell">
-<header class="site-header">
-    <div class="store-container px-5 py-4 md:px-7 lg:px-8">
-        <div class="site-header-bar">
-            <a href="<?= e(route_url('index.php')) ?>" class="site-brand">
-                <span class="site-brand-mark">J</span>
-                <span>
-                    <span class="site-brand-kicker">Jasajoki</span>
-                    <span class="site-brand-title">Digital Store</span>
-                </span>
-            </a>
-            <nav class="site-nav">
-                <a href="<?= e(route_url('index.php')) ?>" class="site-nav-link">Store</a>
-                <a href="<?= e(app_setting('store_whatsapp') ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', (string) app_setting('store_whatsapp')) : '#') ?>" class="site-nav-link">WhatsApp</a>
-                <a href="#catalog" class="site-nav-ghost">Produk</a>
-            </nav>
+<div class="<?= $isAdminLayout ? 'admin-root-shell' : 'site-shell' ?>">
+<?php if ($isAdminLayout): ?>
+    <header class="site-header site-header-admin">
+        <div class="store-container px-5 py-4 md:px-7 lg:px-8">
+            <div class="site-header-bar site-header-bar-admin">
+                <a href="<?= e(route_url('admin/index.php')) ?>" class="site-brand">
+                    <span class="site-brand-mark">J</span>
+                    <span>
+                        <span class="site-brand-kicker">Jasajoki</span>
+                        <span class="site-brand-title">Admin Workspace</span>
+                    </span>
+                </a>
+                <nav class="site-nav">
+                    <a href="<?= e(route_url()) ?>" class="site-nav-link">Lihat Store</a>
+                    <a href="<?= e(route_url('admin/orders.php')) ?>" class="site-nav-link">Order</a>
+                    <a href="<?= e(route_url('admin/security.php')) ?>" class="site-nav-ghost">Keamanan</a>
+                </nav>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
+<?php else: ?>
+    <header class="site-header">
+        <div class="store-container px-5 py-4 md:px-7 lg:px-8">
+            <div class="site-header-bar">
+                <a href="<?= e(route_url('index.php')) ?>" class="site-brand">
+                    <span class="site-brand-mark">J</span>
+                    <span>
+                        <span class="site-brand-kicker">Jasajoki Store</span>
+                        <span class="site-brand-title"><?= e((string) app_setting('store_tagline', 'Produk digital cepat, aman, dan gampang dibeli.')) ?></span>
+                    </span>
+                </a>
+                <nav class="site-nav">
+                    <a href="<?= e(route_url('index.php')) ?>" class="site-nav-link">Beranda</a>
+                    <a href="#catalog" class="site-nav-link">Produk</a>
+                    <a href="<?= e($whatsappLink) ?>" class="site-nav-link">WhatsApp</a>
+                    <a href="<?= e($whatsappLink) ?>" class="site-nav-ghost">Bantuan Cepat</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+<?php endif; ?>

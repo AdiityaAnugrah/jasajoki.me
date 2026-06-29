@@ -9,11 +9,11 @@ $orders = array_slice(orders_all(), 0, 8);
 $stats = admin_stats();
 require __DIR__ . '/partials/layout-top.php';
 ?>
-<section class="grid gap-4 md:grid-cols-2 2xl:grid-cols-5">
+<section class="admin-stat-grid">
     <div class="admin-stat-card p-5">
         <div class="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Produk aktif</div>
         <div class="mt-3 text-3xl font-black text-accent-900"><?= e((string) $stats['products']) ?></div>
-        <div class="mt-2 text-sm text-slate-500">Item yang tampil di etalase store.</div>
+        <div class="mt-2 text-sm text-slate-500">Item yang tampil di storefront.</div>
     </div>
     <div class="admin-stat-card p-5">
         <div class="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Kategori</div>
@@ -40,32 +40,31 @@ require __DIR__ . '/partials/layout-top.php';
 <section class="mt-6 grid gap-6 2xl:grid-cols-[1.2fr_0.8fr]">
     <div class="space-y-6">
         <div class="admin-panel p-6">
-            <div class="mb-4 flex items-center justify-between">
+            <div class="mb-5 flex items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-xl font-black text-accent-900">Snapshot Produk</h3>
-                    <p class="text-sm text-slate-500">Produk terbaru yang aktif di store.</p>
+                    <p class="admin-panel-kicker">Snapshot</p>
+                    <h3 class="mt-2 text-xl font-black text-accent-900">Produk terbaru</h3>
+                    <p class="text-sm text-slate-500">Produk aktif yang paling baru tampil di store.</p>
                 </div>
-                <a href="<?= e(route_url('admin/products.php')) ?>" class="text-sm font-bold text-accent-700">Kelola produk</a>
+                <a href="<?= e(route_url('admin/products.php')) ?>" class="btn-secondary-soft px-4 py-3 text-sm">Kelola produk</a>
             </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full text-left text-sm">
+            <div class="admin-table-wrap">
+                <table class="admin-table">
                     <thead>
-                    <tr class="border-b border-stone-200 text-slate-500">
-                        <th class="pb-3 pr-4">Produk</th>
-                        <th class="pb-3 pr-4">Kategori</th>
-                        <th class="pb-3 pr-4">Harga</th>
-                        <th class="pb-3">Badge</th>
+                    <tr>
+                        <th>Produk</th>
+                        <th>Kategori</th>
+                        <th>Harga</th>
+                        <th>Badge</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($products as $product): ?>
-                        <tr class="border-b border-stone-100 last:border-b-0">
-                            <td class="py-4 pr-4 font-bold text-accent-900"><?= e($product['name']) ?></td>
-                            <td class="py-4 pr-4"><?= e($product['category_name'] ?? '-') ?></td>
-                            <td class="py-4 pr-4 font-semibold"><?= e(money($product['price'])) ?></td>
-                            <td class="py-4">
-                                <span class="rounded-full bg-[#edf2ec] px-3 py-1 text-xs font-bold text-accent-800"><?= e($product['badge'] ?: '-') ?></span>
-                            </td>
+                        <tr>
+                            <td class="font-bold text-accent-900"><?= e($product['name']) ?></td>
+                            <td><?= e($product['category_name'] ?? '-') ?></td>
+                            <td class="font-semibold"><?= e(money($product['price'])) ?></td>
+                            <td><span class="admin-status-chip bg-sky-50 text-sky-700"><?= e($product['badge'] ?: '-') ?></span></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -74,34 +73,35 @@ require __DIR__ . '/partials/layout-top.php';
         </div>
 
         <div class="admin-panel p-6">
-            <div class="mb-4 flex items-center justify-between">
+            <div class="mb-5 flex items-center justify-between gap-4">
                 <div>
-                    <h3 class="text-xl font-black text-accent-900">Order Terbaru</h3>
-                    <p class="text-sm text-slate-500">Cocok untuk cek status transaksi cepat.</p>
+                    <p class="admin-panel-kicker">Transaksi</p>
+                    <h3 class="mt-2 text-xl font-black text-accent-900">Order terbaru</h3>
+                    <p class="text-sm text-slate-500">Biar operator cepat melihat status pembayaran terbaru.</p>
                 </div>
-                <a href="<?= e(route_url('admin/orders.php')) ?>" class="text-sm font-bold text-accent-700">Lihat semua</a>
+                <a href="<?= e(route_url('admin/orders.php')) ?>" class="btn-secondary-soft px-4 py-3 text-sm">Lihat semua</a>
             </div>
             <?php if (!$orders): ?>
-                <div class="rounded-[22px] bg-[#faf4e6] p-5 text-sm text-slate-500">Belum ada order masuk.</div>
+                <div class="admin-empty-state">Belum ada order masuk.</div>
             <?php else: ?>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full text-left text-sm">
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
                         <thead>
-                        <tr class="border-b border-stone-200 text-slate-500">
-                            <th class="pb-3 pr-4">Kode</th>
-                            <th class="pb-3 pr-4">Produk</th>
-                            <th class="pb-3 pr-4">Total</th>
-                            <th class="pb-3">Status</th>
+                        <tr>
+                            <th>Kode</th>
+                            <th>Produk</th>
+                            <th>Total</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php foreach ($orders as $order): ?>
-                            <tr class="border-b border-stone-100 last:border-b-0">
-                                <td class="py-4 pr-4 font-bold text-accent-900"><?= e($order['order_code']) ?></td>
-                                <td class="py-4 pr-4"><?= e($order['product_name']) ?></td>
-                                <td class="py-4 pr-4 font-semibold"><?= e(money($order['amount'])) ?></td>
-                                <td class="py-4">
-                                    <span class="rounded-full px-3 py-1 text-xs font-semibold <?= e(admin_order_status_badge($order['payment_status'])) ?>">
+                            <tr>
+                                <td class="font-bold text-accent-900"><?= e($order['order_code']) ?></td>
+                                <td><?= e($order['product_name']) ?></td>
+                                <td class="font-semibold"><?= e(money($order['amount'])) ?></td>
+                                <td>
+                                    <span class="admin-status-chip <?= e(admin_order_status_badge($order['payment_status'])) ?>">
                                         <?= e($order['payment_status']) ?>
                                     </span>
                                 </td>
@@ -115,10 +115,10 @@ require __DIR__ . '/partials/layout-top.php';
     </div>
 
     <aside class="space-y-6">
-        <div class="rounded-[30px] bg-[#163933] p-6 text-white shadow-soft">
-            <p class="text-xs font-bold uppercase tracking-[0.22em] text-brand-100">Integrasi</p>
+        <div class="admin-dark-card p-6">
+            <p class="text-xs font-bold uppercase tracking-[0.22em] text-sky-200">Integrasi</p>
             <h3 class="mt-3 text-2xl font-black">Status pembayaran</h3>
-            <p class="mt-3 text-sm text-slate-300"><?= e(admin_payment_health()) ?></p>
+            <p class="mt-3 text-sm leading-7 text-slate-200"><?= e(admin_payment_health()) ?></p>
             <div class="mt-4 grid gap-3">
                 <a class="rounded-2xl bg-white px-4 py-3 text-center text-sm font-bold text-slate-950" href="<?= e(route_url('admin/settings.php')) ?>">Cek kredensial</a>
                 <a class="rounded-2xl border border-white/20 px-4 py-3 text-center text-sm font-bold text-white" href="<?= e(route_url('admin/orders.php')) ?>">Pantau order</a>
@@ -126,7 +126,8 @@ require __DIR__ . '/partials/layout-top.php';
         </div>
 
         <div class="admin-panel p-6">
-            <h3 class="text-lg font-black text-accent-900">Quick actions</h3>
+            <p class="admin-panel-kicker">Quick actions</p>
+            <h3 class="mt-2 text-lg font-black text-accent-900">Aksi cepat operator</h3>
             <div class="mt-4 grid gap-3">
                 <a class="btn-secondary-soft px-4 py-3 text-sm text-center" href="<?= e(route_url('admin/products.php')) ?>">Tambah / edit produk</a>
                 <a class="btn-secondary-soft px-4 py-3 text-sm text-center" href="<?= e(route_url('admin/categories.php')) ?>">Atur kategori</a>

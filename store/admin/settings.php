@@ -23,28 +23,28 @@ require __DIR__ . '/partials/layout-top.php';
     <div class="space-y-6">
         <div class="admin-panel p-6">
             <div class="mb-5">
-                <p class="text-xs font-bold uppercase tracking-[0.22em] text-accent-700">Pengaturan utama</p>
+                <p class="admin-panel-kicker">Pengaturan utama</p>
                 <h3 class="mt-2 text-2xl font-black text-accent-900">Brand & kontak store</h3>
-                <p class="text-sm text-slate-500">Informasi ini tampil dan dipakai untuk operasional toko.</p>
+                <p class="admin-panel-subtitle mt-2">Informasi ini dipakai di storefront dan operasional toko, jadi dibuat lebih mudah dibaca dan diubah.</p>
             </div>
             <?php if ($success): ?>
                 <div class="mb-4 rounded-[20px] bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700"><?= e($success) ?></div>
             <?php endif; ?>
             <form method="post" class="space-y-4">
-                <div>
-                    <label class="mb-2 block text-sm font-semibold">Base path</label>
-                    <input class="admin-input bg-[#f5f1e8]" value="<?= e(app_config()['base_path']) ?>" disabled>
+                <div class="admin-field-group">
+                    <label class="text-sm font-semibold">Base path</label>
+                    <input class="admin-input bg-slate-50" value="<?= e(app_config()['base_path']) ?>" disabled>
                 </div>
-                <div>
-                    <label class="mb-2 block text-sm font-semibold">WhatsApp</label>
+                <div class="admin-field-group">
+                    <label class="text-sm font-semibold">WhatsApp</label>
                     <input name="store_whatsapp" class="admin-input" value="<?= e(app_setting('store_whatsapp')) ?>">
                 </div>
-                <div>
-                    <label class="mb-2 block text-sm font-semibold">Email store</label>
+                <div class="admin-field-group">
+                    <label class="text-sm font-semibold">Email store</label>
                     <input name="store_email" class="admin-input" value="<?= e(app_setting('store_email')) ?>">
                 </div>
-                <div>
-                    <label class="mb-2 block text-sm font-semibold">Tagline</label>
+                <div class="admin-field-group">
+                    <label class="text-sm font-semibold">Tagline</label>
                     <textarea name="store_tagline" class="admin-textarea min-h-[120px]"><?= e(app_setting('store_tagline')) ?></textarea>
                 </div>
                 <button type="submit" class="btn-primary-soft px-5 py-3 text-sm">Simpan pengaturan</button>
@@ -53,8 +53,8 @@ require __DIR__ . '/partials/layout-top.php';
     </div>
 
     <aside class="space-y-6">
-        <div class="rounded-[30px] bg-[#163933] p-6 text-white shadow-soft">
-            <p class="text-xs font-bold uppercase tracking-[0.22em] text-brand-100">Payment gateway</p>
+        <div class="admin-dark-card p-6">
+            <p class="text-xs font-bold uppercase tracking-[0.22em] text-sky-200">Payment gateway</p>
             <h3 class="mt-2 text-2xl font-black">QRISify</h3>
             <dl class="mt-4 space-y-3 text-sm">
                 <div class="flex justify-between gap-4"><dt>Mode</dt><dd><?= e(strtoupper($qrisify['mode'] ?? 'TEST')) ?></dd></div>
@@ -63,13 +63,14 @@ require __DIR__ . '/partials/layout-top.php';
                 <div class="flex justify-between gap-4"><dt>Status</dt><dd><?= e(admin_payment_health()) ?></dd></div>
                 <div class="flex justify-between gap-4"><dt>Webhook</dt><dd class="text-right"><?= e($qrisify['webhook_url'] ?: rtrim(app_config()['base_url'], '/') . '/callback-qrisify.php') ?></dd></div>
             </dl>
-            <div class="mt-4 rounded-[22px] bg-white/10 px-4 py-3 text-xs leading-6 text-brand-100">
+            <div class="mt-4 rounded-[22px] bg-white/10 px-4 py-3 text-xs leading-6 text-slate-100">
                 Kalau mode <strong>TEST</strong>, invoice akan menampilkan tombol simulasi bayar agar webhook bisa dites tanpa uang asli.
             </div>
         </div>
 
         <div class="admin-panel p-6">
-            <h3 class="text-lg font-black text-accent-900">Email / SMTP</h3>
+            <p class="admin-panel-kicker">SMTP</p>
+            <h3 class="mt-2 text-lg font-black text-accent-900">Email / SMTP</h3>
             <dl class="mt-4 space-y-3 text-sm">
                 <div class="flex justify-between gap-4"><dt>SMTP Host</dt><dd><?= e(app_config()['mail']['host'] ?: '-') ?></dd></div>
                 <div class="flex justify-between gap-4"><dt>SMTP Port</dt><dd><?= e((string) app_config()['mail']['port']) ?></dd></div>

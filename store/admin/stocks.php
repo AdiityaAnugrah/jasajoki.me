@@ -43,32 +43,33 @@ require __DIR__ . '/partials/layout-top.php';
     <div class="space-y-6">
         <div class="admin-panel p-6">
             <div>
-                <p class="text-xs font-bold uppercase tracking-[0.22em] text-accent-700">Inventory</p>
+                <p class="admin-panel-kicker">Inventory</p>
                 <h3 class="mt-2 text-2xl font-black text-accent-900">Import stok akun</h3>
-                <p class="mt-2 text-sm text-slate-500">Format per baris: <strong>email | password | 2fa</strong></p>
+                <p class="admin-panel-subtitle mt-2">Format per baris: <strong>email | password | 2fa</strong></p>
             </div>
             <?php if ($success): ?>
                 <div class="mt-4 rounded-[20px] bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700"><?= e($success) ?></div>
             <?php endif; ?>
             <form method="post" class="mt-5 space-y-4">
                 <input type="hidden" name="action" value="import">
-                <div>
-                    <label class="mb-2 block text-sm font-semibold">Produk tujuan</label>
+                <div class="admin-field-group">
+                    <label class="text-sm font-semibold">Produk tujuan</label>
                     <select name="product_id" class="admin-select">
                         <?php foreach ($products as $product): ?>
                             <option value="<?= e((string) $product['id']) ?>" <?= $productId === (int) $product['id'] ? 'selected' : '' ?>><?= e($product['name']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div>
-                    <label class="mb-2 block text-sm font-semibold">Bulk stok</label>
-                    <textarea name="bulk_stock" class="admin-textarea min-h-[280px] font-mono" placeholder="bookers_tapper.5m+zabmgd@icloud.com | ;lsdjjii87as# | CJMPW24QAI4SCFEH7GG2LNYMWLK7RQP3"></textarea>
+                <div class="admin-field-group">
+                    <label class="text-sm font-semibold">Bulk stok</label>
+                    <textarea name="bulk_stock" class="admin-textarea min-h-[280px] font-mono" placeholder="email@contoh.com | password123 | KODE2FA"></textarea>
+                    <p class="admin-field-help">Satu baris untuk satu akun. Ini sekarang lebih cocok dipakai untuk import banyak data sekaligus.</p>
                 </div>
                 <button type="submit" class="btn-primary-soft px-5 py-3 text-sm">Import stok</button>
             </form>
         </div>
 
-        <div class="rounded-[30px] bg-[#163933] p-6 text-white shadow-soft">
+        <div class="admin-dark-card p-6">
             <h3 class="text-lg font-black">Ringkasan stok</h3>
             <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div class="rounded-2xl bg-white/5 p-4">
@@ -94,43 +95,44 @@ require __DIR__ . '/partials/layout-top.php';
     <div class="admin-panel p-6">
         <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h3 class="text-xl font-black text-accent-900">Daftar stok</h3>
+                <p class="admin-panel-kicker">Daftar inventory</p>
+                <h3 class="mt-2 text-xl font-black text-accent-900">Stok akun</h3>
                 <p class="text-sm text-slate-500">Kelola stok akun per produk dengan status available, reserved, atau sold.</p>
             </div>
             <div class="flex flex-wrap gap-2">
                 <?php foreach (['ALL', 'available', 'reserved', 'sold'] as $status): ?>
-                    <a href="<?= e(route_url('admin/stocks.php?product_id=' . $productId . '&status=' . $status)) ?>" class="rounded-full px-4 py-2 text-sm font-bold <?= strtolower($statusFilter) === strtolower($status) ? 'bg-[#214943] text-white' : 'border border-stone-300 bg-[#fffefb] text-slate-700' ?>">
+                    <a href="<?= e(route_url('admin/stocks.php?product_id=' . $productId . '&status=' . $status)) ?>" class="admin-filter-chip <?= strtolower($statusFilter) === strtolower($status) ? 'admin-filter-chip-active' : '' ?>">
                         <?= e(strtoupper($status)) ?>
                     </a>
                 <?php endforeach; ?>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
+        <div class="admin-table-wrap">
+            <table class="admin-table">
                 <thead>
-                <tr class="border-b border-stone-200 text-slate-500">
-                    <th class="pb-3 pr-4">Produk</th>
-                    <th class="pb-3 pr-4">Email</th>
-                    <th class="pb-3 pr-4">Password</th>
-                    <th class="pb-3 pr-4">2FA</th>
-                    <th class="pb-3 pr-4">Status</th>
-                    <th class="pb-3">Aksi</th>
+                <tr>
+                    <th>Produk</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>2FA</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($stocks as $stock): ?>
-                    <tr class="border-b border-stone-100 align-top last:border-b-0">
-                        <td class="py-4 pr-4 font-bold text-accent-900"><?= e($stock['product_name']) ?></td>
-                        <td class="py-4 pr-4"><?= e($stock['account_email']) ?></td>
-                        <td class="py-4 pr-4 font-mono text-xs"><?= e($stock['account_password']) ?></td>
-                        <td class="py-4 pr-4 font-mono text-xs"><?= e($stock['account_2fa'] ?: '-') ?></td>
-                        <td class="py-4 pr-4">
-                            <span class="rounded-full px-3 py-1 text-xs font-semibold <?= e(stock_status_badge($stock['stock_status'])) ?>">
+                    <tr>
+                        <td class="font-bold text-accent-900"><?= e($stock['product_name']) ?></td>
+                        <td><?= e($stock['account_email']) ?></td>
+                        <td class="font-mono text-xs"><?= e($stock['account_password']) ?></td>
+                        <td class="font-mono text-xs"><?= e($stock['account_2fa'] ?: '-') ?></td>
+                        <td>
+                            <span class="admin-status-chip <?= e(stock_status_badge($stock['stock_status'])) ?>">
                                 <?= e(strtoupper($stock['stock_status'])) ?>
                             </span>
                         </td>
-                        <td class="py-4">
+                        <td>
                             <div class="flex flex-wrap gap-2">
                                 <?php foreach (['available', 'reserved', 'sold'] as $status): ?>
                                     <form method="post">
