@@ -10,7 +10,7 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
     <title><?= e($pageTitle) ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -47,4 +47,4 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
     <link rel="stylesheet" href="<?= e(asset_url('css/app.css')) ?>">
 </head>
 <body class="bg-brand-50 text-slate-900">
-<div class="mx-auto min-h-screen max-w-md bg-[#fffaf0] shadow-soft md:max-w-6xl">
+<div class="min-h-screen bg-[#fffaf0]">
