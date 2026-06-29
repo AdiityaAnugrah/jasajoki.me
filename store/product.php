@@ -18,7 +18,7 @@ require __DIR__ . '/partials/header.php';
 ?>
 <div class="min-h-screen">
 <main class="store-container px-4 pb-10 pt-5 md:px-6 lg:px-8">
-    <a href="<?= e(route_url()) ?>" class="text-sm font-semibold text-[#171411]">← Kembali ke store</a>
+    <a href="<?= e(route_url()) ?>" class="subtle-link text-sm font-semibold">Kembali ke store</a>
 
     <section class="mt-4 grid gap-6 xl:grid-cols-[1fr_0.95fr]">
         <div class="section-card overflow-hidden p-3">
@@ -35,7 +35,10 @@ require __DIR__ . '/partials/header.php';
         </div>
 
         <div class="section-card p-5 md:p-7">
-            <span class="store-chip px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"><?= e($product['badge']) ?></span>
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="store-chip px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"><?= e($product['badge']) ?></span>
+                <span class="store-chip px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"><?= e($product['category_name'] ?? 'Store') ?></span>
+            </div>
             <h1 class="title-display mt-4 text-[34px] leading-[0.95] text-[#171411] md:text-[50px]"><?= e($product['name']) ?></h1>
             <p class="store-muted mt-4 text-sm leading-7 md:text-base"><?= e($product['description']) ?></p>
             <div class="store-line mt-6 grid gap-4 border-t pt-6 sm:grid-cols-2">

@@ -80,7 +80,7 @@ require __DIR__ . '/partials/header.php';
 ?>
 <div class="min-h-screen">
 <main class="store-container px-4 pb-10 pt-5 md:px-6 lg:px-8">
-    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="text-sm font-semibold text-[#171411]">← Kembali ke detail produk</a>
+    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="subtle-link text-sm font-semibold">Kembali ke detail produk</a>
 
     <section class="mt-4 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <div class="section-card p-5 md:p-7">
@@ -91,18 +91,18 @@ require __DIR__ . '/partials/header.php';
             <div class="store-line mt-6 space-y-4 border-t pt-6">
                 <div class="flex items-start justify-between gap-4">
                     <div>
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Produk</div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Produk</div>
                         <div class="mt-2 text-xl font-semibold text-[#171411]"><?= e($product['name']) ?></div>
                     </div>
                     <div class="store-chip px-4 py-2 text-xs font-semibold"><?= e($product['badge'] ?: 'Ready') ?></div>
                 </div>
                 <div class="grid gap-3 sm:grid-cols-2">
                     <div class="info-block p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Harga produk</div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Harga produk</div>
                         <div class="mt-2 text-2xl font-semibold text-[#171411]"><?= e(money($product['price'])) ?></div>
                     </div>
                     <div class="info-block p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Metode</div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Metode</div>
                         <div class="mt-2 text-2xl font-semibold text-[#171411]">QRIS</div>
                     </div>
                 </div>

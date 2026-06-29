@@ -1,14 +1,14 @@
 body {
     font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f6f1e8;
-    color: #171411;
+    background: #f4efe7;
+    color: #16120f;
 }
 
 .site-shell {
     min-height: 100vh;
     background:
-        radial-gradient(circle at top, rgba(255, 255, 255, 0.7), transparent 38%),
-        linear-gradient(180deg, #f6f1e8 0%, #f3ede3 100%);
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.76), transparent 38%),
+        linear-gradient(180deg, #f4efe7 0%, #efe8de 100%);
 }
 
 .store-container {
@@ -18,8 +18,8 @@ body {
 }
 
 .store-topbar {
-    background: rgba(246, 241, 232, 0.88);
-    border-bottom: 1px solid rgba(23, 20, 17, 0.08);
+    background: rgba(244, 239, 231, 0.94);
+    border-bottom: 1px solid rgba(22, 18, 15, 0.1);
     backdrop-filter: blur(18px);
 }
 
@@ -31,23 +31,23 @@ body {
 }
 
 .eyebrow {
-    color: #7a6c5d;
+    color: #6d6054;
     letter-spacing: 0.22em;
     text-transform: uppercase;
 }
 
 .section-card {
     border-radius: 32px;
-    background: rgba(255, 252, 247, 0.92);
-    border: 1px solid rgba(23, 20, 17, 0.08);
-    box-shadow: 0 18px 60px rgba(43, 33, 22, 0.06);
+    background: rgba(255, 251, 246, 0.98);
+    border: 1px solid rgba(22, 18, 15, 0.08);
+    box-shadow: 0 18px 60px rgba(43, 33, 22, 0.05);
 }
 
 .product-card {
     overflow: hidden;
     border-radius: 28px;
-    background: rgba(255, 252, 247, 0.9);
-    border: 1px solid rgba(23, 20, 17, 0.08);
+    background: rgba(255, 251, 246, 0.98);
+    border: 1px solid rgba(22, 18, 15, 0.09);
     box-shadow: 0 12px 34px rgba(43, 33, 22, 0.05);
     transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
@@ -70,27 +70,27 @@ body {
 }
 
 .store-media-fallback {
-    background: linear-gradient(135deg, #efe6d8 0%, #e4d7c3 100%);
-    color: #2a241d;
+    background: linear-gradient(135deg, #ede3d5 0%, #dfd0bb 100%);
+    color: #201a15;
 }
 
 .store-chip {
     display: inline-flex;
     align-items: center;
     border-radius: 999px;
-    border: 1px solid rgba(23, 20, 17, 0.08);
-    background: rgba(255, 255, 255, 0.78);
-    color: #4a4036;
+    border: 1px solid rgba(22, 18, 15, 0.1);
+    background: #f8f2e8;
+    color: #3f342b;
 }
 
 .store-chip-active {
-    background: #171411;
+    background: #16120f;
     color: #f8f4ed;
-    border-color: #171411;
+    border-color: #16120f;
 }
 
 .store-muted {
-    color: #6a5e52;
+    color: #55493f;
 }
 
 .store-line {
@@ -102,7 +102,7 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    background: #171411;
+    background: #16120f;
     color: #f8f4ed;
 }
 
@@ -111,47 +111,55 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    border: 1px solid rgba(23, 20, 17, 0.1);
-    background: rgba(255, 255, 255, 0.72);
-    color: #171411;
+    border: 1px solid rgba(22, 18, 15, 0.12);
+    background: #fffdfa;
+    color: #16120f;
 }
 
 .field-input {
     width: 100%;
     border-radius: 18px;
-    border: 1px solid rgba(23, 20, 17, 0.1);
-    background: #fffdf9;
-    color: #171411;
+    border: 1px solid rgba(22, 18, 15, 0.12);
+    background: #fffdfa;
+    color: #16120f;
     padding: 14px 16px;
     outline: none;
 }
 
 .field-input::placeholder {
-    color: #9a8d80;
+    color: #86786b;
 }
 
 .field-input:focus {
-    border-color: rgba(23, 20, 17, 0.3);
-    box-shadow: 0 0 0 4px rgba(23, 20, 17, 0.05);
+    border-color: rgba(22, 18, 15, 0.28);
+    box-shadow: 0 0 0 4px rgba(22, 18, 15, 0.06);
 }
 
 .info-block {
     border-radius: 24px;
-    border: 1px solid rgba(23, 20, 17, 0.08);
-    background: rgba(255, 255, 255, 0.56);
+    border: 1px solid rgba(22, 18, 15, 0.08);
+    background: rgba(255, 255, 255, 0.82);
 }
 
 .minimal-divider {
     height: 1px;
-    background: rgba(23, 20, 17, 0.08);
+    background: rgba(22, 18, 15, 0.1);
 }
 
 .mono-block {
     border-radius: 18px;
-    border: 1px solid rgba(23, 20, 17, 0.08);
-    background: #f0e7da;
-    color: #241d17;
+    border: 1px solid rgba(22, 18, 15, 0.1);
+    background: #efe5d8;
+    color: #1f1813;
     font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.subtle-link {
+    color: #2b241f;
+}
+
+.subtle-link:hover {
+    color: #16120f;
 }
 
 @media (min-width: 768px) {

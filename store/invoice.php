@@ -64,7 +64,7 @@ require __DIR__ . '/partials/header.php';
             <div class="store-line mt-6 border-t pt-6">
                 <div class="flex items-center justify-between gap-3">
                     <div>
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Kode order</div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Kode order</div>
                         <div class="mt-2 text-xl font-semibold text-[#171411]"><?= e($orderCode) ?></div>
                     </div>
                     <span class="rounded-full px-3 py-1 text-xs font-semibold <?= e(admin_order_status_badge($order['payment_status'] ?? 'UNPAID')) ?>">
@@ -74,11 +74,11 @@ require __DIR__ . '/partials/header.php';
 
                 <div class="mt-5 grid gap-3 sm:grid-cols-2">
                     <div class="info-block p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Nominal bayar</div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Nominal bayar</div>
                         <div class="mt-2 text-2xl font-semibold text-[#171411]"><?= e(money((float) ($order['tripay_pay_code'] ?: $order['amount'] ?: 0))) ?></div>
                     </div>
                     <div class="info-block p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Provider</div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#6d6054]">Provider</div>
                         <div class="mt-2 text-2xl font-semibold text-[#171411]">QRISify</div>
                     </div>
                 </div>
@@ -118,7 +118,7 @@ require __DIR__ . '/partials/header.php';
 
                         <?php if (!empty($order['tripay_pay_code'])): ?>
                             <div class="info-block p-4 text-sm">
-                                <div class="text-xs uppercase tracking-[0.2em] text-[#7a6c5d]">Nominal final QRIS</div>
+                                <div class="text-xs uppercase tracking-[0.2em] text-[#6d6054]">Nominal final QRIS</div>
                                 <div class="mt-2 text-2xl font-semibold text-[#171411]"><?= e(money((float) $order['tripay_pay_code'])) ?></div>
                                 <div class="store-muted mt-2 text-xs">Sudah termasuk unique code dari gateway jika ada.</div>
                             </div>
@@ -142,7 +142,7 @@ require __DIR__ . '/partials/header.php';
 
                         <?php if (strtoupper((string) ($order['payment_status'] ?? '')) === 'PAID'): ?>
                             <div class="info-block p-4 text-sm">
-                                <div class="text-xs uppercase tracking-[0.2em] text-[#7a6c5d]">Delivery status</div>
+                                <div class="text-xs uppercase tracking-[0.2em] text-[#6d6054]">Delivery status</div>
                                 <?php if ($deliveredStock): ?>
                                     <div class="mt-2 text-lg font-semibold text-[#171411]">Data akun siap diambil</div>
                                     <div class="store-muted mt-2 text-sm">Kamu bisa copy datanya langsung atau download file `.txt` di bawah.</div>
@@ -159,7 +159,7 @@ require __DIR__ . '/partials/header.php';
 
                 <?php if (!empty($order['tripay_qr_string'])): ?>
                     <div class="store-line mt-5 rounded-[24px] border border-black/8 bg-white/60 p-4 text-xs leading-6 text-[#5b4f43] break-all">
-                        <div class="mb-2 text-xs uppercase tracking-[0.2em] text-[#7a6c5d]">QR String</div>
+                        <div class="mb-2 text-xs uppercase tracking-[0.2em] text-[#6d6054]">QR String</div>
                         <?= e($order['tripay_qr_string']) ?>
                     </div>
                 <?php endif; ?>

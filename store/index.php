@@ -16,8 +16,8 @@ require __DIR__ . '/partials/header.php';
             <h1 class="mt-1 text-[18px] font-semibold text-[#171411]">Digital account store</h1>
         </div>
         <div class="hidden items-center gap-2 md:flex">
-            <span class="btn-secondary px-4 py-2 text-xs font-semibold">QRIS checkout</span>
-            <span class="btn-secondary px-4 py-2 text-xs font-semibold">Auto delivery</span>
+            <span class="store-chip px-4 py-2 text-xs font-semibold">QRIS checkout</span>
+            <span class="store-chip px-4 py-2 text-xs font-semibold">Auto delivery</span>
         </div>
     </div>
 </header>
@@ -78,9 +78,6 @@ require __DIR__ . '/partials/header.php';
                 <article class="product-card p-3">
                     <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="block">
                         <div class="relative">
-                            <div class="absolute left-3 top-3 z-10">
-                                <span class="store-chip px-3 py-2 text-[11px] font-semibold"><?= e($product['badge'] ?: 'Ready') ?></span>
-                            </div>
                             <?php if (!empty($product['image_url'])): ?>
                                 <img src="<?= e($product['image_url']) ?>" alt="<?= e($product['name']) ?>" class="store-media">
                             <?php else: ?>
@@ -93,16 +90,19 @@ require __DIR__ . '/partials/header.php';
                             <?php endif; ?>
                         </div>
                         <div class="px-2 pb-2 pt-5">
-                            <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a6c5d]"><?= e($product['category_name'] ?? 'Store') ?></div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6d6054]"><?= e($product['category_name'] ?? 'Store') ?></div>
+                                <span class="store-chip px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]"><?= e($product['badge'] ?: 'Ready') ?></span>
+                            </div>
                             <h4 class="mt-2 text-[24px] font-semibold leading-tight text-[#171411]"><?= e($product['name']) ?></h4>
                             <p class="store-muted mt-3 text-sm leading-7"><?= e($product['description']) ?></p>
                             <div class="minimal-divider mt-5"></div>
                             <div class="mt-4 flex items-end justify-between gap-3">
                                 <div>
-                                    <div class="text-xs uppercase tracking-[0.16em] text-[#7a6c5d]">Harga</div>
+                                    <div class="text-xs uppercase tracking-[0.16em] text-[#6d6054]">Harga</div>
                                     <div class="mt-1 text-2xl font-semibold text-[#171411]"><?= e(money($product['price'])) ?></div>
                                 </div>
-                                <div class="btn-secondary px-4 py-2 text-xs font-semibold">Detail</div>
+                                <div class="btn-secondary px-4 py-2 text-xs font-semibold">Lihat</div>
                             </div>
                         </div>
                     </a>
