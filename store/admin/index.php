@@ -10,27 +10,27 @@ $stats = admin_stats();
 require __DIR__ . '/partials/layout-top.php';
 ?>
 <section class="grid gap-4 md:grid-cols-2 2xl:grid-cols-5">
-    <div class="rounded-3xl bg-white p-5 shadow-soft">
+    <div class="rounded-[28px] bg-white p-5 shadow-soft">
         <div class="text-sm text-slate-500">Produk aktif</div>
         <div class="mt-2 text-3xl font-bold"><?= e((string) $stats['products']) ?></div>
         <div class="mt-2 text-xs text-slate-400">Item jual yang tampil di storefront.</div>
     </div>
-    <div class="rounded-3xl bg-white p-5 shadow-soft">
+    <div class="rounded-[28px] bg-white p-5 shadow-soft">
         <div class="text-sm text-slate-500">Kategori aktif</div>
         <div class="mt-2 text-3xl font-bold"><?= e((string) $stats['categories']) ?></div>
         <div class="mt-2 text-xs text-slate-400">Navigasi produk lebih rapi untuk customer.</div>
     </div>
-    <div class="rounded-3xl bg-white p-5 shadow-soft">
+    <div class="rounded-[28px] bg-white p-5 shadow-soft">
         <div class="text-sm text-slate-500">Order hari ini</div>
         <div class="mt-2 text-3xl font-bold"><?= e((string) $stats['orders_today']) ?></div>
         <div class="mt-2 text-xs text-slate-400">Monitor order masuk secara cepat.</div>
     </div>
-    <div class="rounded-3xl bg-white p-5 shadow-soft">
+    <div class="rounded-[28px] bg-white p-5 shadow-soft">
         <div class="text-sm text-slate-500">Revenue paid</div>
         <div class="mt-2 text-3xl font-bold"><?= e(money($stats['revenue'])) ?></div>
         <div class="mt-2 text-xs text-slate-400"><?= e((string) $stats['paid_orders']) ?> order sudah lunas.</div>
     </div>
-    <div class="rounded-3xl bg-white p-5 shadow-soft">
+    <div class="rounded-[28px] bg-white p-5 shadow-soft">
         <div class="text-sm text-slate-500">Stok tersedia</div>
         <div class="mt-2 text-3xl font-bold"><?= e((string) $stats['stocks_available']) ?></div>
         <div class="mt-2 text-xs text-slate-400">Dari total <?= e((string) $stats['stocks_total']) ?> data akun.</div>
@@ -39,7 +39,7 @@ require __DIR__ . '/partials/layout-top.php';
 
 <section class="mt-6 grid gap-6 2xl:grid-cols-[1.2fr_0.8fr]">
     <div class="space-y-6">
-        <div class="rounded-3xl bg-white p-6 shadow-soft">
+        <div class="rounded-[30px] bg-white p-6 shadow-soft">
             <div class="mb-4 flex items-center justify-between">
                 <div>
                     <h3 class="text-xl font-bold">Snapshot Produk</h3>
@@ -71,7 +71,7 @@ require __DIR__ . '/partials/layout-top.php';
             </div>
         </div>
 
-        <div class="rounded-3xl bg-white p-6 shadow-soft">
+        <div class="rounded-[30px] bg-white p-6 shadow-soft">
             <div class="mb-4 flex items-center justify-between">
                 <div>
                     <h3 class="text-xl font-bold">Order Terbaru</h3>
@@ -113,7 +113,7 @@ require __DIR__ . '/partials/layout-top.php';
     </div>
 
     <aside class="space-y-6">
-        <div class="rounded-3xl bg-[#1c1c19] p-6 text-white shadow-soft">
+        <div class="rounded-[30px] bg-[#163933] p-6 text-white shadow-soft">
             <h3 class="text-lg font-bold">Status pembayaran</h3>
             <p class="mt-3 text-sm text-slate-300"><?= e(admin_payment_health()) ?></p>
             <div class="mt-4 grid gap-3">
@@ -122,7 +122,7 @@ require __DIR__ . '/partials/layout-top.php';
             </div>
         </div>
 
-        <div class="rounded-3xl bg-white p-6 shadow-soft">
+        <div class="rounded-[30px] bg-white p-6 shadow-soft">
             <h3 class="text-lg font-bold">Quick actions</h3>
             <div class="mt-4 grid gap-3">
                 <a class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700" href="<?= e(route_url('admin/products.php')) ?>">Tambah / edit produk</a>

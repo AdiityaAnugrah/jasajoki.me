@@ -15,20 +15,27 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
                 extend: {
                     colors: {
                         brand: {
-                            50: '#f7f7f5',
-                            100: '#efeee8',
-                            200: '#ddd8cb',
-                            500: '#5b5b50',
-                            700: '#34342f',
-                            900: '#171717'
+                            50: '#fffaf0',
+                            100: '#fdf1d9',
+                            200: '#f7e2b5',
+                            300: '#eed19a',
+                            500: '#d0a96d',
+                            700: '#9a7342',
+                            900: '#654728'
                         },
                         accent: {
-                            500: '#1f3a5f',
-                            600: '#152944'
+                            50: '#eef4f2',
+                            100: '#d7e5e1',
+                            300: '#95b5ad',
+                            500: '#2f5d57',
+                            600: '#204943',
+                            700: '#143c36',
+                            900: '#0b2f2a'
                         }
                     },
                     boxShadow: {
-                        soft: '0 18px 50px rgba(15, 23, 42, 0.08)'
+                        soft: '0 20px 50px rgba(24, 37, 34, 0.08)',
+                        floaty: '0 14px 30px rgba(47, 93, 87, 0.10)'
                     }
                 }
             }
@@ -36,5 +43,5 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
     </script>
     <link rel="stylesheet" href="<?= e(asset_url('css/app.css')) ?>">
 </head>
-<body class="bg-stone-100 text-slate-900">
-<div class="mx-auto min-h-screen max-w-md bg-[#fcfcfa] shadow-soft md:max-w-6xl">
+<body class="bg-brand-50 text-slate-900">
+<div class="mx-auto min-h-screen max-w-md bg-[#fffaf0] shadow-soft md:max-w-6xl">
