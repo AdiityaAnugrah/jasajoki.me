@@ -41,16 +41,17 @@ if ($order && !empty($order['tripay_reference']) && qrisify_has_credentials()) {
 
 $flashSuccess = flash('success');
 $flashError = flash('error');
+$deliveredStock = $order ? stock_find_by_order_id((int) $order['id']) : null;
 
 $pageTitle = 'Invoice ' . $orderCode;
 require __DIR__ . '/partials/header.php';
 ?>
-<div class="mobile-shell min-h-screen">
+<div class="min-h-screen">
 <main class="store-container px-4 pb-10 pt-5 md:px-6 lg:px-8">
     <section class="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
-        <div class="card-soft rounded-[32px] p-5 md:p-7">
-            <p class="store-kicker text-xs font-bold uppercase tracking-[0.24em]">Invoice pembayaran</p>
-            <h1 class="store-heading mt-4 text-[34px] font-black leading-[0.95] text-[#f7f3ea] md:text-[48px]">Scan QR dan pantau status transaksi secara real-time.</h1>
+        <div class="section-card p-5 md:p-7">
+            <p class="eyebrow text-[11px] font-semibold">Invoice pembayaran</p>
+            <h1 class="title-display mt-4 text-[34px] leading-[0.95] text-[#171411] md:text-[50px]">Scan QR dan pantau status transaksi secara real-time.</h1>
             <p class="store-muted mt-4 text-sm leading-7">Begitu pembayaran terdeteksi, status order akan ikut berubah otomatis.</p>
 
             <?php if ($flashSuccess): ?>
@@ -63,8 +64,8 @@ require __DIR__ . '/partials/header.php';
             <div class="store-line mt-6 border-t pt-6">
                 <div class="flex items-center justify-between gap-3">
                     <div>
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#cab38f]">Kode order</div>
-                        <div class="mt-2 text-xl font-black text-[#f7f3ea]"><?= e($orderCode) ?></div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Kode order</div>
+                        <div class="mt-2 text-xl font-semibold text-[#171411]"><?= e($orderCode) ?></div>
                     </div>
                     <span class="rounded-full px-3 py-1 text-xs font-semibold <?= e(admin_order_status_badge($order['payment_status'] ?? 'UNPAID')) ?>">
                         <?= e($order['payment_status'] ?? 'UNPAID') ?>
@@ -72,78 +73,93 @@ require __DIR__ . '/partials/header.php';
                 </div>
 
                 <div class="mt-5 grid gap-3 sm:grid-cols-2">
-                    <div class="store-stat p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#cab38f]">Nominal bayar</div>
-                        <div class="mt-2 text-2xl font-black text-[#f7f3ea]"><?= e(money((float) ($order['tripay_pay_code'] ?: $order['amount'] ?: 0))) ?></div>
+                    <div class="info-block p-4">
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Nominal bayar</div>
+                        <div class="mt-2 text-2xl font-semibold text-[#171411]"><?= e(money((float) ($order['tripay_pay_code'] ?: $order['amount'] ?: 0))) ?></div>
                     </div>
-                    <div class="store-stat p-4">
-                        <div class="text-xs uppercase tracking-[0.18em] text-[#cab38f]">Provider</div>
-                        <div class="mt-2 text-2xl font-black text-[#f7f3ea]">QRISify</div>
+                    <div class="info-block p-4">
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#7a6c5d]">Provider</div>
+                        <div class="mt-2 text-2xl font-semibold text-[#171411]">QRISify</div>
                     </div>
                 </div>
 
-                <div class="mt-4 rounded-[24px] border border-white/8 bg-white/4 p-4 text-sm">
-                    <div class="flex justify-between gap-4"><span class="store-muted">Produk</span><strong class="text-[#f7f3ea]"><?= e($order['product_name'] ?? 'Demo Product') ?></strong></div>
-                    <div class="mt-2 flex justify-between gap-4"><span class="store-muted">Metode</span><strong class="text-[#f7f3ea]">QRISify QRIS</strong></div>
-                    <div class="mt-2 flex justify-between gap-4"><span class="store-muted">Status order</span><strong class="text-[#f7f3ea]"><?= e($order['order_status'] ?? 'PENDING') ?></strong></div>
+                <div class="info-block mt-4 p-4 text-sm">
+                    <div class="flex justify-between gap-4"><span class="store-muted">Produk</span><strong class="text-[#171411]"><?= e($order['product_name'] ?? 'Demo Product') ?></strong></div>
+                    <div class="mt-2 flex justify-between gap-4"><span class="store-muted">Metode</span><strong class="text-[#171411]">QRISify QRIS</strong></div>
+                    <div class="mt-2 flex justify-between gap-4"><span class="store-muted">Status order</span><strong class="text-[#171411]"><?= e($order['order_status'] ?? 'PENDING') ?></strong></div>
                 </div>
             </div>
         </div>
 
-        <div class="card-soft rounded-[32px] p-5 md:p-7">
+        <div class="section-card p-5 md:p-7">
             <?php if ($order): ?>
                 <div class="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
-                    <div class="rounded-[28px] border border-white/8 bg-white/4 p-4 text-center">
-                        <div class="mb-3 text-sm font-semibold text-[#f7f3ea]">Scan QR untuk bayar</div>
+                    <div class="info-block p-4 text-center">
+                        <div class="mb-3 text-sm font-semibold text-[#171411]">Scan QR untuk bayar</div>
                         <?php if (!empty($order['tripay_qr_url'])): ?>
-                            <img src="<?= e($order['tripay_qr_url']) ?>" alt="QRIS" class="mx-auto w-full max-w-[280px] rounded-2xl border border-white/10 bg-white p-2">
+                            <img src="<?= e($order['tripay_qr_url']) ?>" alt="QRIS" class="mx-auto w-full max-w-[280px] rounded-2xl border border-black/10 bg-white p-2">
                         <?php else: ?>
                             <div class="store-media-fallback flex !h-[280px] items-center justify-center p-6">
                                 <div class="text-center">
-                                    <div class="text-sm font-bold uppercase tracking-[0.2em] text-brand-100">QR belum tersedia</div>
-                                    <div class="mt-3 text-2xl font-black">Coba refresh invoice</div>
+                                    <div class="text-sm font-semibold uppercase tracking-[0.2em]">QR belum tersedia</div>
+                                    <div class="mt-3 text-2xl font-semibold">Coba refresh invoice</div>
                                 </div>
                             </div>
                         <?php endif; ?>
                     </div>
 
                     <div class="space-y-4">
-                        <div class="rounded-[24px] border border-white/8 bg-white/4 p-4 text-sm">
-                            <div><strong class="text-[#f7f3ea]">Nama:</strong> <span class="store-muted"><?= e($order['customer_name']) ?></span></div>
-                            <div class="mt-2"><strong class="text-[#f7f3ea]">Email:</strong> <span class="store-muted"><?= e($order['customer_email'] ?? '-') ?></span></div>
-                            <div class="mt-2"><strong class="text-[#f7f3ea]">Account:</strong> <span class="store-muted"><?= e($order['customer_account']) ?></span></div>
-                            <div class="mt-2"><strong class="text-[#f7f3ea]">WhatsApp:</strong> <span class="store-muted"><?= e($order['customer_whatsapp']) ?></span></div>
+                        <div class="info-block p-4 text-sm">
+                            <div><strong class="text-[#171411]">Nama:</strong> <span class="store-muted"><?= e($order['customer_name']) ?></span></div>
+                            <div class="mt-2"><strong class="text-[#171411]">Email:</strong> <span class="store-muted"><?= e($order['customer_email'] ?? '-') ?></span></div>
+                            <div class="mt-2"><strong class="text-[#171411]">Account:</strong> <span class="store-muted"><?= e($order['customer_account']) ?></span></div>
+                            <div class="mt-2"><strong class="text-[#171411]">WhatsApp:</strong> <span class="store-muted"><?= e($order['customer_whatsapp']) ?></span></div>
                         </div>
 
                         <?php if (!empty($order['tripay_pay_code'])): ?>
-                            <div class="rounded-[24px] border border-white/8 bg-white/4 p-4 text-sm">
-                                <div class="text-xs uppercase tracking-[0.2em] text-[#cab38f]">Nominal final QRIS</div>
-                                <div class="mt-2 text-2xl font-black text-[#f7f3ea]"><?= e(money((float) $order['tripay_pay_code'])) ?></div>
+                            <div class="info-block p-4 text-sm">
+                                <div class="text-xs uppercase tracking-[0.2em] text-[#7a6c5d]">Nominal final QRIS</div>
+                                <div class="mt-2 text-2xl font-semibold text-[#171411]"><?= e(money((float) $order['tripay_pay_code'])) ?></div>
                                 <div class="store-muted mt-2 text-xs">Sudah termasuk unique code dari gateway jika ada.</div>
                             </div>
                         <?php endif; ?>
 
                         <?php if (!empty($order['expired_time'])): ?>
-                            <div class="rounded-[24px] bg-[#f0dfbf] px-4 py-3 text-sm text-[#171717]">
+                            <div class="rounded-[24px] bg-[#171411] px-4 py-3 text-sm text-[#f8f4ed]">
                                 Berlaku sampai: <strong><?= e(date('d M Y H:i', (int) $order['expired_time'])) ?></strong>
                             </div>
                         <?php endif; ?>
 
                         <div class="grid gap-3">
-                            <a href="<?= e(route_url('invoice.php?code=' . urlencode($orderCode))) ?>" class="store-cta inline-flex w-full justify-center rounded-2xl px-4 py-3 text-sm font-semibold">Refresh status pembayaran</a>
+                            <a href="<?= e(route_url('invoice.php?code=' . urlencode($orderCode))) ?>" class="btn-primary w-full px-4 py-3 text-sm font-semibold">Refresh status pembayaran</a>
                             <?php if (!qrisify_is_live() && !empty($order['tripay_reference'])): ?>
                                 <form method="post">
                                     <input type="hidden" name="action" value="test_pay">
-                                    <button type="submit" class="store-outline inline-flex w-full justify-center rounded-2xl px-4 py-3 text-sm font-semibold">Simulasikan pembayaran test</button>
+                                    <button type="submit" class="btn-secondary w-full px-4 py-3 text-sm font-semibold">Simulasikan pembayaran test</button>
                                 </form>
                             <?php endif; ?>
                         </div>
+
+                        <?php if (strtoupper((string) ($order['payment_status'] ?? '')) === 'PAID'): ?>
+                            <div class="info-block p-4 text-sm">
+                                <div class="text-xs uppercase tracking-[0.2em] text-[#7a6c5d]">Delivery status</div>
+                                <?php if ($deliveredStock): ?>
+                                    <div class="mt-2 text-lg font-semibold text-[#171411]">Data akun siap diambil</div>
+                                    <div class="store-muted mt-2 text-sm">Kamu bisa copy datanya langsung atau download file `.txt` di bawah.</div>
+                                    <div class="mono-block mt-4 p-4 text-xs leading-6 break-all"><?= e(stock_delivery_text($deliveredStock)) ?></div>
+                                    <a href="<?= e(route_url('download-delivery.php?code=' . urlencode($orderCode))) ?>" class="btn-primary mt-4 w-full px-4 py-3 text-sm font-semibold">Download .txt</a>
+                                <?php else: ?>
+                                    <div class="mt-2 text-lg font-semibold text-[#171411]">Pembayaran berhasil</div>
+                                    <div class="store-muted mt-2 text-sm">Stok belum berhasil dipasangkan otomatis. Silakan hubungi admin store agar data akun dikirim manual.</div>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
                 <?php if (!empty($order['tripay_qr_string'])): ?>
-                    <div class="store-line mt-5 rounded-[24px] border border-white/8 bg-white/4 p-4 text-xs leading-6 text-[#d9d1c4] break-all">
-                        <div class="mb-2 text-xs uppercase tracking-[0.2em] text-[#cab38f]">QR String</div>
+                    <div class="store-line mt-5 rounded-[24px] border border-black/8 bg-white/60 p-4 text-xs leading-6 text-[#5b4f43] break-all">
+                        <div class="mb-2 text-xs uppercase tracking-[0.2em] text-[#7a6c5d]">QR String</div>
                         <?= e($order['tripay_qr_string']) ?>
                     </div>
                 <?php endif; ?>

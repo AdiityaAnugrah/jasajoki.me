@@ -377,6 +377,10 @@ function order_update_status_by_reference(string $merchantRef, string $tripayRef
         'tripay_reference' => $tripayReference,
         'order_code' => $merchantRef,
     ]);
+
+    if ($paymentStatus === 'PAID') {
+        order_fulfill_stock($merchantRef);
+    }
 }
 
 function order_update_status_by_code(string $orderCode, string $paymentStatus): void
@@ -516,6 +520,79 @@ function stock_delete(int $stockId): void
 {
     $statement = db()->prepare('DELETE FROM product_stocks WHERE id = :id');
     $statement->execute(['id' => $stockId]);
+}
+
+function stock_find_by_order_id(int $orderId): ?array
+{
+    if (!app_is_installed() || !table_exists('product_stocks')) {
+        return null;
+    }
+
+    $statement = db()->prepare('SELECT * FROM product_stocks WHERE sold_order_id = :order_id LIMIT 1');
+    $statement->execute(['order_id' => $orderId]);
+    return $statement->fetch() ?: null;
+}
+
+function stock_find_first_available(int $productId): ?array
+{
+    if (!app_is_installed() || !table_exists('product_stocks')) {
+        return null;
+    }
+
+    $statement = db()->prepare('SELECT * FROM product_stocks WHERE product_id = :product_id AND stock_status = :stock_status ORDER BY id ASC LIMIT 1');
+    $statement->execute([
+        'product_id' => $productId,
+        'stock_status' => 'available',
+    ]);
+    return $statement->fetch() ?: null;
+}
+
+function stock_assign_to_order(int $stockId, int $orderId): void
+{
+    $statement = db()->prepare('UPDATE product_stocks SET stock_status = :stock_status, sold_order_id = :sold_order_id WHERE id = :id');
+    $statement->execute([
+        'stock_status' => 'sold',
+        'sold_order_id' => $orderId,
+        'id' => $stockId,
+    ]);
+}
+
+function order_fulfill_stock(string $orderCode): bool
+{
+    $order = order_find_by_code($orderCode);
+    if (!$order) {
+        return false;
+    }
+
+    if (stock_find_by_order_id((int) $order['id'])) {
+        $statement = db()->prepare('UPDATE orders SET order_status = :order_status WHERE id = :id');
+        $statement->execute([
+            'order_status' => 'FULFILLED',
+            'id' => $order['id'],
+        ]);
+        return true;
+    }
+
+    $stock = stock_find_first_available((int) $order['product_id']);
+    if (!$stock) {
+        return false;
+    }
+
+    stock_assign_to_order((int) $stock['id'], (int) $order['id']);
+    $statement = db()->prepare('UPDATE orders SET order_status = :order_status WHERE id = :id');
+    $statement->execute([
+        'order_status' => 'FULFILLED',
+        'id' => $order['id'],
+    ]);
+
+    return true;
+}
+
+function stock_delivery_text(array $stock): string
+{
+    return trim((string) ($stock['account_email'] ?? ''))
+        . ' | ' . trim((string) ($stock['account_password'] ?? ''))
+        . ' | ' . trim((string) ($stock['account_2fa'] ?? ''));
 }
 
 function stock_counts(): array
