@@ -48,3 +48,26 @@ function require_admin(): void
         redirect(route_url('admin/login.php'));
     }
 }
+
+function admin_change_password(string $username, string $currentPassword, string $newPassword): array
+{
+    if ($newPassword === '' || strlen($newPassword) < 8) {
+        return ['success' => false, 'message' => 'Password baru minimal 8 karakter.'];
+    }
+
+    $statement = db()->prepare('SELECT * FROM admins WHERE username = :username LIMIT 1');
+    $statement->execute(['username' => $username]);
+    $admin = $statement->fetch();
+
+    if (!$admin || !password_verify($currentPassword, $admin['password_hash'])) {
+        return ['success' => false, 'message' => 'Password saat ini tidak cocok.'];
+    }
+
+    $update = db()->prepare('UPDATE admins SET password_hash = :password_hash WHERE id = :id');
+    $update->execute([
+        'password_hash' => password_hash($newPassword, PASSWORD_DEFAULT),
+        'id' => $admin['id'],
+    ]);
+
+    return ['success' => true, 'message' => 'Password admin berhasil diperbarui.'];
+}

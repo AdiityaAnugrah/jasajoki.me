@@ -144,6 +144,49 @@ function categories_all(): array
     return $statement->fetchAll();
 }
 
+function category_find(int $id): ?array
+{
+    if (!app_is_installed()) {
+        foreach (sample_categories() as $category) {
+            if ((int) $category['id'] === $id) {
+                return $category;
+            }
+        }
+
+        return null;
+    }
+
+    $statement = db()->prepare('SELECT * FROM categories WHERE id = :id LIMIT 1');
+    $statement->execute(['id' => $id]);
+    return $statement->fetch() ?: null;
+}
+
+function categories_save(array $data, ?int $id = null): void
+{
+    $payload = [
+        'name' => trim((string) $data['name']),
+        'slug' => trim((string) ($data['slug'] ?: slugify((string) $data['name']))),
+        'sort_order' => (int) ($data['sort_order'] ?: 0),
+        'is_active' => !empty($data['is_active']) ? 1 : 0,
+    ];
+
+    if ($id) {
+        $payload['id'] = $id;
+        $sql = 'UPDATE categories SET name = :name, slug = :slug, sort_order = :sort_order, is_active = :is_active WHERE id = :id';
+    } else {
+        $sql = 'INSERT INTO categories (name, slug, sort_order, is_active) VALUES (:name, :slug, :sort_order, :is_active)';
+    }
+
+    $statement = db()->prepare($sql);
+    $statement->execute($payload);
+}
+
+function categories_delete(int $id): void
+{
+    $statement = db()->prepare('DELETE FROM categories WHERE id = :id');
+    $statement->execute(['id' => $id]);
+}
+
 function products_all(?string $categorySlug = null): array
 {
     if (!app_is_installed()) {
@@ -392,12 +435,37 @@ function admin_stats(): array
     }
 
     $totalOrders = (int) db()->query('SELECT COUNT(*) FROM orders')->fetchColumn();
+    $categories = (int) db()->query('SELECT COUNT(*) FROM categories')->fetchColumn();
+    $paidOrders = (int) db()->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'PAID'")->fetchColumn();
+    $revenue = (float) db()->query("SELECT COALESCE(SUM(amount), 0) FROM orders WHERE payment_status = 'PAID'")->fetchColumn();
 
     return [
         'products' => $products,
+        'categories' => $categories,
         'orders_today' => $ordersToday,
         'total_orders' => $totalOrders,
+        'paid_orders' => $paidOrders,
+        'revenue' => $revenue,
     ];
+}
+
+function admin_order_status_badge(string $status): string
+{
+    return match (strtoupper($status)) {
+        'PAID' => 'bg-emerald-50 text-emerald-700',
+        'EXPIRED' => 'bg-amber-50 text-amber-700',
+        'FAILED', 'REFUND' => 'bg-rose-50 text-rose-700',
+        default => 'bg-slate-100 text-slate-700',
+    };
+}
+
+function admin_payment_health(): string
+{
+    if (!tripay_has_credentials()) {
+        return 'Kredensial belum lengkap';
+    }
+
+    return tripay_is_production() ? 'Tripay Production Aktif' : 'Tripay Sandbox Aktif';
 }
 
 function sample_categories(): array
