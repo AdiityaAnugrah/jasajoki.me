@@ -1,0 +1,3 @@
+-- Gunakan salah satu:
+-- sqlite_schema.sql untuk local ringan
+-- mysql_schema.sql untuk server MariaDB/MySQL

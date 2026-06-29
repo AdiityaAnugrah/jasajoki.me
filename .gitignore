@@ -1,0 +1,11 @@
+.env
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/database.sqlite
+/storage/database.sqlite-journal
+/storage/test.sqlite
+/storage/test.sqlite-journal
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
