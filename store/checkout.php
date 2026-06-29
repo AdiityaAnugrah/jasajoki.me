@@ -101,49 +101,49 @@ $pageTitle = 'Checkout - ' . $product['name'];
 require __DIR__ . '/partials/header.php';
 ?>
 <main class="px-4 pb-8 pt-4">
-    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="text-sm font-semibold text-blue-600">← Edit data</a>
-    <h1 class="mt-4 text-2xl font-bold">Checkout</h1>
-    <p class="mt-1 text-sm text-slate-500">Tahap berikutnya tinggal pilih metode pembayaran Tripay.</p>
+    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="text-sm font-semibold text-slate-600">← Edit data</a>
+    <h1 class="mt-4 text-2xl font-bold text-slate-900">Checkout</h1>
+    <p class="mt-1 text-sm text-slate-500">Review pesanan dan lanjutkan ke pembayaran dengan tampilan yang lebih sederhana.</p>
 
-    <section class="mt-5 rounded-3xl bg-white p-5 shadow-soft">
+    <section class="mt-5 rounded-[28px] border border-stone-200 bg-white p-5 shadow-soft">
         <div class="flex items-center justify-between">
             <div>
                 <div class="text-xs text-slate-500">Produk</div>
                 <div class="font-bold"><?= e($product['name']) ?></div>
             </div>
-            <div class="text-lg font-extrabold"><?= e(money($product['price'])) ?></div>
+            <div class="text-lg font-extrabold text-slate-900"><?= e(money($product['price'])) ?></div>
         </div>
     </section>
 
-    <section class="mt-5 rounded-3xl border border-slate-100 bg-white p-5">
-        <h2 class="text-base font-bold">Metode pembayaran</h2>
+    <section class="mt-5 rounded-[28px] border border-stone-200 bg-white p-5 shadow-soft">
+        <h2 class="text-base font-bold text-slate-900">Metode pembayaran</h2>
         <div class="mt-3 grid gap-3">
             <?php foreach ($channels as $channel): ?>
-                <label class="flex items-center justify-between rounded-2xl border border-slate-200 px-4 py-4">
+                <label class="flex items-center justify-between rounded-2xl border border-stone-200 px-4 py-4">
                     <div>
-                        <div class="font-semibold"><?= e($channel['name']) ?></div>
+                        <div class="font-semibold text-slate-900"><?= e($channel['name']) ?></div>
                         <div class="text-xs text-slate-500"><?= e($channel['code']) ?></div>
                     </div>
                     <input type="radio" name="channel" <?= $channel['code'] === $selectedChannel ? 'checked' : '' ?> disabled>
                 </label>
             <?php endforeach; ?>
         </div>
-        <div class="mt-4 rounded-2xl <?= ($tripayResponse['success'] ?? false) ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700' ?> p-4 text-sm">
+        <div class="mt-4 rounded-2xl <?= ($tripayResponse['success'] ?? false) ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-slate-700' ?> p-4 text-sm">
             <?php if ($createdOrderCode): ?>
                 Order berhasil dibuat dengan kode <strong><?= e($createdOrderCode) ?></strong>.
                 <?php if ($tripayResponse && !($tripayResponse['success'] ?? false)): ?>
                     <div class="mt-2"><?= e($tripayResponse['message']) ?></div>
                 <?php elseif (!empty($tripayResponse['data']['checkout_url'])): ?>
-                    <div class="mt-2">Transaksi Tripay berhasil dibuat. Lanjut ke invoice atau buka halaman pembayaran Tripay.</div>
+                    <div class="mt-2">Transaksi berhasil dibuat. Lanjut ke invoice atau buka halaman pembayaran Tripay.</div>
                 <?php endif; ?>
             <?php else: ?>
-                Integrasi Tripay masih stub. Setelah database di-setup dan API key diisi, halaman ini akan membuat transaksi real.
+                Integrasi pembayaran belum aktif sempurna.
             <?php endif; ?>
         </div>
         <div class="mt-4 grid gap-3">
-            <a href="<?= e(route_url('invoice.php?code=' . urlencode($createdOrderCode ?: ('DEMO-' . $product['id'])))) ?>" class="inline-flex w-full justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Lihat Invoice</a>
+            <a href="<?= e(route_url('invoice.php?code=' . urlencode($createdOrderCode ?: ('DEMO-' . $product['id'])))) ?>" class="inline-flex w-full justify-center rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white">Lihat invoice</a>
             <?php if (!empty($tripayResponse['data']['checkout_url'])): ?>
-                <a href="<?= e($tripayResponse['data']['checkout_url']) ?>" target="_blank" class="inline-flex w-full justify-center rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-800">Buka Halaman Pembayaran Tripay</a>
+                <a href="<?= e($tripayResponse['data']['checkout_url']) ?>" target="_blank" class="inline-flex w-full justify-center rounded-2xl border border-stone-300 px-4 py-3 text-sm font-semibold text-slate-800">Buka checkout Tripay</a>
             <?php endif; ?>
         </div>
     </section>

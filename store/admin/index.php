@@ -9,7 +9,7 @@ $orders = array_slice(orders_all(), 0, 8);
 $stats = admin_stats();
 require __DIR__ . '/partials/layout-top.php';
 ?>
-<section class="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
+<section class="grid gap-4 md:grid-cols-2 2xl:grid-cols-5">
     <div class="rounded-3xl bg-white p-5 shadow-soft">
         <div class="text-sm text-slate-500">Produk aktif</div>
         <div class="mt-2 text-3xl font-bold"><?= e((string) $stats['products']) ?></div>
@@ -29,6 +29,11 @@ require __DIR__ . '/partials/layout-top.php';
         <div class="text-sm text-slate-500">Revenue paid</div>
         <div class="mt-2 text-3xl font-bold"><?= e(money($stats['revenue'])) ?></div>
         <div class="mt-2 text-xs text-slate-400"><?= e((string) $stats['paid_orders']) ?> order sudah lunas.</div>
+    </div>
+    <div class="rounded-3xl bg-white p-5 shadow-soft">
+        <div class="text-sm text-slate-500">Stok tersedia</div>
+        <div class="mt-2 text-3xl font-bold"><?= e((string) $stats['stocks_available']) ?></div>
+        <div class="mt-2 text-xs text-slate-400">Dari total <?= e((string) $stats['stocks_total']) ?> data akun.</div>
     </div>
 </section>
 
@@ -108,7 +113,7 @@ require __DIR__ . '/partials/layout-top.php';
     </div>
 
     <aside class="space-y-6">
-        <div class="rounded-3xl bg-slate-900 p-6 text-white shadow-soft">
+        <div class="rounded-3xl bg-[#1c1c19] p-6 text-white shadow-soft">
             <h3 class="text-lg font-bold">Status pembayaran</h3>
             <p class="mt-3 text-sm text-slate-300"><?= e(admin_payment_health()) ?></p>
             <div class="mt-4 grid gap-3">
@@ -122,6 +127,7 @@ require __DIR__ . '/partials/layout-top.php';
             <div class="mt-4 grid gap-3">
                 <a class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700" href="<?= e(route_url('admin/products.php')) ?>">Tambah / edit produk</a>
                 <a class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700" href="<?= e(route_url('admin/categories.php')) ?>">Atur kategori</a>
+                <a class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700" href="<?= e(route_url('admin/stocks.php')) ?>">Import & kelola stok</a>
                 <a class="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700" href="<?= e(route_url('admin/security.php')) ?>">Ganti password admin</a>
             </div>
         </div>

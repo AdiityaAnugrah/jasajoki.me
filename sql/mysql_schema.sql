@@ -72,3 +72,18 @@ CREATE TABLE IF NOT EXISTS payment_logs (
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_payment_logs_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS product_stocks (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    product_id BIGINT UNSIGNED NOT NULL,
+    account_email VARCHAR(190) NOT NULL,
+    account_password TEXT NOT NULL,
+    account_2fa TEXT NULL,
+    stock_status VARCHAR(30) NOT NULL DEFAULT 'available',
+    notes TEXT NULL,
+    sold_order_id BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_product_stocks_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    CONSTRAINT fk_product_stocks_order FOREIGN KEY (sold_order_id) REFERENCES orders(id) ON DELETE SET NULL
+);

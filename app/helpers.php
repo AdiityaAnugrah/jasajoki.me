@@ -416,6 +416,122 @@ function orders_all(): array
     return db()->query($sql)->fetchAll();
 }
 
+function stocks_all(?int $productId = null, ?string $status = null): array
+{
+    if (!app_is_installed() || !table_exists('product_stocks')) {
+        return [];
+    }
+
+    $sql = 'SELECT ps.*, p.name AS product_name
+            FROM product_stocks ps
+            JOIN products p ON p.id = ps.product_id
+            WHERE 1=1';
+    $params = [];
+
+    if ($productId) {
+        $sql .= ' AND ps.product_id = :product_id';
+        $params['product_id'] = $productId;
+    }
+
+    if ($status && $status !== 'ALL') {
+        $sql .= ' AND ps.stock_status = :stock_status';
+        $params['stock_status'] = strtolower($status);
+    }
+
+    $sql .= ' ORDER BY ps.id DESC';
+    $statement = db()->prepare($sql);
+    $statement->execute($params);
+    return $statement->fetchAll();
+}
+
+function stock_create(int $productId, string $email, string $password, string $twoFactor = '', string $notes = ''): void
+{
+    $statement = db()->prepare('INSERT INTO product_stocks (product_id, account_email, account_password, account_2fa, notes, stock_status)
+        VALUES (:product_id, :account_email, :account_password, :account_2fa, :notes, :stock_status)');
+    $statement->execute([
+        'product_id' => $productId,
+        'account_email' => trim($email),
+        'account_password' => trim($password),
+        'account_2fa' => trim($twoFactor),
+        'notes' => trim($notes),
+        'stock_status' => 'available',
+    ]);
+}
+
+function stocks_import_lines(int $productId, string $bulkLines): array
+{
+    $lines = preg_split('/\r\n|\r|\n/', trim($bulkLines)) ?: [];
+    $imported = 0;
+    $failed = [];
+
+    foreach ($lines as $index => $line) {
+        $line = trim($line);
+        if ($line === '') {
+            continue;
+        }
+
+        $parts = array_map('trim', explode('|', $line));
+        if (count($parts) < 2) {
+            $failed[] = 'Baris ' . ($index + 1) . ' format tidak valid.';
+            continue;
+        }
+
+        $email = $parts[0] ?? '';
+        $password = $parts[1] ?? '';
+        $twoFactor = $parts[2] ?? '';
+
+        if ($email === '' || $password === '') {
+            $failed[] = 'Baris ' . ($index + 1) . ' email/password kosong.';
+            continue;
+        }
+
+        stock_create($productId, $email, $password, $twoFactor);
+        $imported++;
+    }
+
+    return ['imported' => $imported, 'failed' => $failed];
+}
+
+function stock_update_status(int $stockId, string $status): void
+{
+    $allowed = ['available', 'reserved', 'sold'];
+    if (!in_array($status, $allowed, true)) {
+        return;
+    }
+
+    $statement = db()->prepare('UPDATE product_stocks SET stock_status = :stock_status WHERE id = :id');
+    $statement->execute([
+        'stock_status' => $status,
+        'id' => $stockId,
+    ]);
+}
+
+function stock_delete(int $stockId): void
+{
+    $statement = db()->prepare('DELETE FROM product_stocks WHERE id = :id');
+    $statement->execute(['id' => $stockId]);
+}
+
+function stock_counts(): array
+{
+    if (!app_is_installed() || !table_exists('product_stocks')) {
+        return ['available' => 0, 'reserved' => 0, 'sold' => 0, 'total' => 0];
+    }
+
+    $rows = db()->query('SELECT stock_status, COUNT(*) as total FROM product_stocks GROUP BY stock_status')->fetchAll();
+    $data = ['available' => 0, 'reserved' => 0, 'sold' => 0, 'total' => 0];
+    foreach ($rows as $row) {
+        $status = strtolower((string) $row['stock_status']);
+        $count = (int) $row['total'];
+        if (isset($data[$status])) {
+            $data[$status] = $count;
+        }
+        $data['total'] += $count;
+    }
+
+    return $data;
+}
+
 function admin_stats(): array
 {
     if (!app_is_installed()) {
@@ -438,6 +554,7 @@ function admin_stats(): array
     $categories = (int) db()->query('SELECT COUNT(*) FROM categories')->fetchColumn();
     $paidOrders = (int) db()->query("SELECT COUNT(*) FROM orders WHERE payment_status = 'PAID'")->fetchColumn();
     $revenue = (float) db()->query("SELECT COALESCE(SUM(amount), 0) FROM orders WHERE payment_status = 'PAID'")->fetchColumn();
+    $stocks = stock_counts();
 
     return [
         'products' => $products,
@@ -446,6 +563,10 @@ function admin_stats(): array
         'total_orders' => $totalOrders,
         'paid_orders' => $paidOrders,
         'revenue' => $revenue,
+        'stocks_available' => $stocks['available'],
+        'stocks_reserved' => $stocks['reserved'],
+        'stocks_sold' => $stocks['sold'],
+        'stocks_total' => $stocks['total'],
     ];
 }
 
@@ -466,6 +587,16 @@ function admin_payment_health(): string
     }
 
     return tripay_is_production() ? 'Tripay Production Aktif' : 'Tripay Sandbox Aktif';
+}
+
+function stock_status_badge(string $status): string
+{
+    return match (strtolower($status)) {
+        'available' => 'bg-emerald-50 text-emerald-700',
+        'reserved' => 'bg-amber-50 text-amber-700',
+        'sold' => 'bg-slate-200 text-slate-800',
+        default => 'bg-slate-100 text-slate-700',
+    };
 }
 
 function sample_categories(): array

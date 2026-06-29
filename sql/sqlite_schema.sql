@@ -72,3 +72,18 @@ CREATE TABLE IF NOT EXISTS payment_logs (
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS product_stocks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER NOT NULL,
+    account_email TEXT NOT NULL,
+    account_password TEXT NOT NULL,
+    account_2fa TEXT NULL,
+    stock_status TEXT NOT NULL DEFAULT 'available',
+    notes TEXT NULL,
+    sold_order_id INTEGER NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (sold_order_id) REFERENCES orders(id) ON DELETE SET NULL
+);

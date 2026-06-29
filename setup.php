@@ -46,6 +46,21 @@ foreach ($orderColumns as $column => $definition) {
     }
 }
 
+$stockColumns = [
+    'notes' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'TEXT NULL',
+    'sold_order_id' => db_driver() === 'sqlite' ? 'INTEGER NULL' : 'BIGINT UNSIGNED NULL',
+];
+
+if (table_exists('product_stocks')) {
+    foreach ($stockColumns as $column => $definition) {
+        try {
+            $pdo->query("SELECT $column FROM product_stocks LIMIT 1");
+        } catch (Throwable $exception) {
+            $pdo->exec("ALTER TABLE product_stocks ADD COLUMN $column $definition");
+        }
+    }
+}
+
 if ((int) $pdo->query('SELECT COUNT(*) FROM admins')->fetchColumn() === 0) {
     $statement = $pdo->prepare('INSERT INTO admins (username, password_hash, full_name) VALUES (:username, :password_hash, :full_name)');
     $statement->execute([
