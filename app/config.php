@@ -64,6 +64,13 @@ return [
         'webhook_secret' => env_value('QRISIFY_WEBHOOK_SECRET', ''),
         'webhook_url' => env_value('QRISIFY_WEBHOOK_URL', ''),
     ],
+    'r2' => [
+        'account_id' => env_value('CF_R2_ACCOUNT_ID', ''),
+        'bucket' => env_value('CF_R2_BUCKET', ''),
+        'public_base_url' => env_value('CF_R2_PUBLIC_BASE_URL', ''),
+        'access_key_id' => env_value('CF_R2_ACCESS_KEY_ID', ''),
+        'secret_access_key' => env_value('CF_R2_SECRET_ACCESS_KEY', ''),
+    ],
     'mail' => [
         'username' => env_value('EMAIL_USER', ''),
         'password' => env_value('EMAIL_PASS', ''),

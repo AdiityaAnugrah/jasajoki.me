@@ -28,6 +28,18 @@ if ($schema === false) {
 
 $pdo->exec($schema);
 
+$productColumns = [
+    'image_url' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'TEXT NULL',
+];
+
+foreach ($productColumns as $column => $definition) {
+    try {
+        $pdo->query("SELECT $column FROM products LIMIT 1");
+    } catch (Throwable $exception) {
+        $pdo->exec("ALTER TABLE products ADD COLUMN $column $definition");
+    }
+}
+
 $orderColumns = [
     'customer_email' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'VARCHAR(150) NULL',
     'tripay_checkout_url' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'TEXT NULL',
@@ -84,7 +96,7 @@ if ((int) $pdo->query('SELECT COUNT(*) FROM categories')->fetchColumn() === 0) {
 
 if ((int) $pdo->query('SELECT COUNT(*) FROM products')->fetchColumn() === 0) {
     foreach (sample_products() as $product) {
-        $statement = $pdo->prepare('INSERT INTO products (category_id, name, slug, description, price, badge, is_active) VALUES (:category_id, :name, :slug, :description, :price, :badge, :is_active)');
+        $statement = $pdo->prepare('INSERT INTO products (category_id, name, slug, description, price, badge, image_url, is_active) VALUES (:category_id, :name, :slug, :description, :price, :badge, :image_url, :is_active)');
         $statement->execute([
             'category_id' => $product['category_id'],
             'name' => $product['name'],
@@ -92,6 +104,7 @@ if ((int) $pdo->query('SELECT COUNT(*) FROM products')->fetchColumn() === 0) {
             'description' => $product['description'],
             'price' => $product['price'],
             'badge' => $product['badge'],
+            'image_url' => $product['image_url'] ?? '',
             'is_active' => $product['is_active'],
         ]);
     }

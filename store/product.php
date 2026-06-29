@@ -20,13 +20,25 @@ require __DIR__ . '/partials/header.php';
 <main class="px-4 pb-8 pt-4">
     <a href="<?= e(route_url()) ?>" class="text-sm font-semibold text-accent-700">← Kembali ke store</a>
 
-    <section class="card-soft mt-4 rounded-[32px] p-5">
-        <span class="inline-flex rounded-full bg-accent-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent-700"><?= e($product['badge']) ?></span>
-        <h1 class="mt-3 text-[30px] font-black leading-tight text-accent-900"><?= e($product['name']) ?></h1>
-        <p class="mt-3 text-sm leading-6 text-slate-600"><?= e($product['description']) ?></p>
-        <div class="mt-5 rounded-3xl bg-brand-100/60 p-4">
-            <div class="text-xs text-slate-500">Harga</div>
-            <div class="mt-1 text-2xl font-extrabold text-accent-900"><?= e(money($product['price'])) ?></div>
+    <section class="card-soft mt-4 overflow-hidden rounded-[32px] p-3">
+        <?php if (!empty($product['image_url'])): ?>
+            <img src="<?= e($product['image_url']) ?>" alt="<?= e($product['name']) ?>" class="store-media">
+        <?php else: ?>
+            <div class="store-media-fallback flex items-end p-5">
+                <div>
+                    <div class="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-100"><?= e($product['category_name'] ?? 'Produk') ?></div>
+                    <div class="mt-2 text-3xl font-black leading-tight"><?= e($product['name']) ?></div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <div class="p-2 pt-5">
+            <span class="inline-flex rounded-full bg-accent-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-accent-700"><?= e($product['badge']) ?></span>
+            <h1 class="mt-3 text-[30px] font-black leading-tight text-accent-900"><?= e($product['name']) ?></h1>
+            <p class="mt-3 text-sm leading-6 text-slate-600"><?= e($product['description']) ?></p>
+            <div class="mt-5 rounded-3xl bg-brand-100/60 p-4">
+                <div class="text-xs text-slate-500">Harga mulai</div>
+                <div class="mt-1 text-2xl font-extrabold text-accent-900"><?= e(money($product['price'])) ?></div>
+            </div>
         </div>
     </section>
 

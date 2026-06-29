@@ -27,6 +27,22 @@ body {
     box-shadow: 0 18px 35px rgba(24, 57, 53, 0.08);
 }
 
+.store-media {
+    height: 180px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 26px;
+}
+
+.store-media-fallback {
+    height: 180px;
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.22), transparent 28%),
+        linear-gradient(135deg, #173f3a 0%, #2d6159 55%, #f0d79e 120%);
+    color: #fff8eb;
+}
+
 .card-soft {
     background: rgba(255, 255, 255, 0.92);
     border: 1px solid rgba(21, 60, 54, 0.08);
@@ -75,6 +91,20 @@ body {
     background: rgba(255, 255, 255, 0.96);
     border: 1px solid rgba(23, 63, 58, 0.08);
     box-shadow: 0 14px 30px rgba(24, 57, 53, 0.1);
+}
+
+.store-grid-card {
+    overflow: hidden;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(23, 63, 58, 0.08);
+    box-shadow: 0 18px 35px rgba(24, 57, 53, 0.08);
+}
+
+.store-floating-chip {
+    border-radius: 999px;
+    background: rgba(255, 248, 235, 0.92);
+    color: #173f3a;
 }
 
 .admin-surface {

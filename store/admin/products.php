@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../app/auth.php';
+require_once __DIR__ . '/../../app/r2.php';
 require_admin();
 
 $categories = categories_all();
@@ -9,6 +10,17 @@ if (is_post() && app_is_installed()) {
 
     if ($action === 'save') {
         $id = request_post('id') ? (int) request_post('id') : null;
+        $imageUrl = (string) request_post('image_url');
+
+        if (!empty($_FILES['image_file']['name'] ?? '')) {
+            $upload = r2_upload_product_image($_FILES['image_file'], (string) request_post('name'));
+            if (!$upload['success']) {
+                flash('success', $upload['message']);
+                redirect(route_url('admin/products.php' . ($id ? '?edit=' . $id : '')));
+            }
+            $imageUrl = (string) $upload['public_url'];
+        }
+
         products_save([
             'category_id' => request_post('category_id'),
             'name' => request_post('name'),
@@ -16,6 +28,7 @@ if (is_post() && app_is_installed()) {
             'description' => request_post('description'),
             'price' => request_post('price'),
             'badge' => request_post('badge'),
+            'image_url' => $imageUrl,
             'is_active' => request_post('is_active'),
         ], $id);
         flash('success', $id ? 'Produk berhasil diperbarui.' : 'Produk berhasil ditambahkan.');
@@ -37,7 +50,7 @@ $success = flash('success');
 require __DIR__ . '/partials/layout-top.php';
 ?>
 <section class="grid gap-6 2xl:grid-cols-[420px_1fr]">
-    <form method="post" class="admin-panel space-y-5 p-6">
+    <form method="post" enctype="multipart/form-data" class="admin-panel space-y-5 p-6">
         <input type="hidden" name="action" value="save">
         <input type="hidden" name="id" value="<?= e($editing['id'] ?? '') ?>">
         <div>
@@ -78,6 +91,21 @@ require __DIR__ . '/partials/layout-top.php';
             <label class="mb-2 block text-sm font-semibold">Deskripsi</label>
             <textarea name="description" class="admin-textarea min-h-[140px]"><?= e($editing['description'] ?? '') ?></textarea>
         </div>
+        <div>
+            <label class="mb-2 block text-sm font-semibold">URL gambar produk</label>
+            <input name="image_url" value="<?= e($editing['image_url'] ?? '') ?>" class="admin-input" placeholder="https://foto.jasajoki.me/products/...">
+            <p class="mt-2 text-xs text-slate-500">Bisa isi manual atau upload file langsung ke R2 di bawah.</p>
+        </div>
+        <div>
+            <label class="mb-2 block text-sm font-semibold">Upload gambar ke R2</label>
+            <input type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp" class="admin-input">
+            <p class="mt-2 text-xs text-slate-500">Format: jpg, jpeg, png, webp.</p>
+        </div>
+        <?php if (!empty($editing['image_url'])): ?>
+            <div class="overflow-hidden rounded-[22px] border border-stone-200 bg-white">
+                <img src="<?= e($editing['image_url']) ?>" alt="<?= e($editing['name'] ?? 'Preview') ?>" class="h-44 w-full object-cover">
+            </div>
+        <?php endif; ?>
         <label class="flex items-center gap-3 rounded-[20px] bg-[#faf4e6] px-4 py-3 text-sm font-semibold text-slate-700">
             <input type="checkbox" name="is_active" value="1" <?= !isset($editing['is_active']) || (int) $editing['is_active'] === 1 ? 'checked' : '' ?>>
             Produk aktif
@@ -111,8 +139,17 @@ require __DIR__ . '/partials/layout-top.php';
                 <?php foreach ($products as $product): ?>
                     <tr class="border-b border-stone-100 last:border-b-0">
                         <td class="py-4 pr-4">
-                            <div class="font-bold text-accent-900"><?= e($product['name']) ?></div>
-                            <div class="text-xs text-slate-500"><?= e($product['badge']) ?></div>
+                            <div class="flex items-center gap-3">
+                                <?php if (!empty($product['image_url'])): ?>
+                                    <img src="<?= e($product['image_url']) ?>" alt="<?= e($product['name']) ?>" class="h-14 w-14 rounded-2xl object-cover">
+                                <?php else: ?>
+                                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#edf2ec] text-sm font-black text-accent-800"><?= e(strtoupper(substr($product['name'], 0, 1))) ?></div>
+                                <?php endif; ?>
+                                <div>
+                                    <div class="font-bold text-accent-900"><?= e($product['name']) ?></div>
+                                    <div class="text-xs text-slate-500"><?= e($product['badge']) ?></div>
+                                </div>
+                            </div>
                         </td>
                         <td class="py-4 pr-4"><?= e($product['category_name'] ?? '-') ?></td>
                         <td class="py-4 pr-4 font-semibold"><?= e(money($product['price'])) ?></td>

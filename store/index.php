@@ -9,36 +9,53 @@ $appInstalled = app_is_installed();
 require __DIR__ . '/partials/header.php';
 ?>
 <div class="mobile-shell min-h-screen">
-<header class="store-topbar sticky top-0 z-20 px-4 py-5">
+<header class="store-topbar sticky top-0 z-20 px-4 py-5 backdrop-blur-sm">
     <div class="flex items-center justify-between gap-3">
         <div>
             <p class="text-[11px] font-bold uppercase tracking-[0.24em] text-accent-700">JasaJoki Store</p>
-            <h1 class="mt-1 text-[18px] font-extrabold text-accent-900"><?= e(app_config()['app_name']) ?></h1>
+            <h1 class="mt-1 text-[18px] font-extrabold text-accent-900">Digital products curated</h1>
         </div>
         <a href="<?= e(route_url('admin/login.php')) ?>" class="store-pill rounded-full px-4 py-2 text-xs font-semibold">Admin</a>
     </div>
 </header>
 
-<main class="px-4 pb-8 pt-4">
+<main class="px-4 pb-10 pt-2">
     <?php if (!$appInstalled): ?>
         <section class="mb-4 rounded-3xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
             Database belum di-setup. Jalankan <strong>php setup.php</strong> dulu supaya produk, admin, dan order aktif penuh.
         </section>
     <?php endif; ?>
 
-    <section class="store-hero px-1 pb-3">
-        <p class="text-[14px] font-bold text-accent-700">JasaJoki</p>
-        <h2 class="mt-3 text-[48px] font-black leading-[0.95] tracking-[-0.04em] text-accent-900">Pilih produk yang cocok</h2>
-        <p class="mt-4 pr-8 text-sm leading-6 text-slate-600"><?= e(app_setting('store_tagline')) ?></p>
-        <div class="mt-5">
-            <a href="<?= e(route_url('index.php')) ?>" class="store-pill inline-flex items-center gap-3 rounded-full px-5 py-3 text-base font-bold">
-                <span>Semua produk</span>
-                <span>⌄</span>
-            </a>
+    <section class="store-card overflow-hidden p-5">
+        <div class="rounded-[26px] bg-[#143c36] p-5 text-white">
+            <p class="text-[11px] font-bold uppercase tracking-[0.24em] text-brand-100">Pilihan terbaik</p>
+            <h2 class="mt-3 text-[36px] font-black leading-[0.95]">Store yang akhirnya terlihat seperti brand beneran.</h2>
+            <p class="mt-3 text-sm leading-6 text-brand-100"><?= e(app_setting('store_tagline')) ?></p>
+        </div>
+        <div class="mt-4 grid grid-cols-3 gap-3 text-center">
+            <div class="rounded-[22px] bg-[#faf4e6] px-3 py-4">
+                <div class="text-lg font-black text-accent-900"><?= count($products) ?></div>
+                <div class="mt-1 text-[11px] font-semibold text-slate-500">Produk</div>
+            </div>
+            <div class="rounded-[22px] bg-[#edf2ec] px-3 py-4">
+                <div class="text-lg font-black text-accent-900"><?= count($categories) ?></div>
+                <div class="mt-1 text-[11px] font-semibold text-slate-500">Kategori</div>
+            </div>
+            <div class="rounded-[22px] bg-[#faf4e6] px-3 py-4">
+                <div class="text-lg font-black text-accent-900">QRIS</div>
+                <div class="mt-1 text-[11px] font-semibold text-slate-500">Payment</div>
+            </div>
         </div>
     </section>
 
     <section class="mt-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-[0.2em] text-accent-700">Kategori</p>
+                <h3 class="mt-1 text-2xl font-black text-accent-900">Browse produk</h3>
+            </div>
+            <a href="<?= e(route_url('index.php')) ?>" class="text-sm font-bold text-accent-700">Reset</a>
+        </div>
         <div class="mt-3 flex gap-2 overflow-x-auto pb-2">
             <?php foreach ($categories as $category): ?>
                 <a href="<?= e(route_url('index.php?category=' . $category['slug'])) ?>"
@@ -49,24 +66,41 @@ require __DIR__ . '/partials/header.php';
         </div>
     </section>
 
-    <section class="mt-4">
-        <div class="mt-3 grid gap-4">
+    <section class="mt-5">
+        <div class="grid gap-5">
             <?php foreach ($products as $product): ?>
-                <article class="store-card p-4">
+                <article class="store-grid-card p-3">
                     <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="block">
-                        <div class="flex items-center gap-4">
-                            <div class="store-icon-bubble">
-                                <?= strtoupper(substr($product['name'], 0, 1)) ?>
+                        <div class="relative">
+                            <?php if (!empty($product['image_url'])): ?>
+                                <img src="<?= e($product['image_url']) ?>" alt="<?= e($product['name']) ?>" class="store-media">
+                            <?php else: ?>
+                                <div class="store-media-fallback flex items-end p-5">
+                                    <div>
+                                        <div class="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-100"><?= e($product['category_name'] ?? 'Produk') ?></div>
+                                        <div class="mt-2 text-2xl font-black leading-tight"><?= e($product['name']) ?></div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <div class="store-floating-chip absolute left-3 top-3 px-3 py-2 text-[11px] font-bold uppercase tracking-[0.16em]">
+                                <?= e($product['badge'] ?: 'Ready') ?>
                             </div>
-                            <div class="min-w-0 flex-1">
-                                <h4 class="truncate text-[18px] font-extrabold leading-tight text-accent-900"><?= e($product['name']) ?></h4>
-                                <p class="mt-1 text-sm font-semibold text-slate-500">
-                                    <?= !empty($product['category_name']) ? e($product['category_name']) . ' · ' : '' ?>
-                                    mulai <?= e(money($product['price'])) ?>
-                                </p>
-                                <p class="mt-1 line-clamp-1 text-xs text-slate-400"><?= e($product['description']) ?></p>
+                        </div>
+                        <div class="px-2 pb-2 pt-4">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="min-w-0">
+                                    <h4 class="text-[20px] font-black leading-tight text-accent-900"><?= e($product['name']) ?></h4>
+                                    <p class="mt-2 line-clamp-2 text-sm leading-6 text-slate-500"><?= e($product['description']) ?></p>
+                                </div>
+                                <div class="store-chevron mt-1 shrink-0">›</div>
                             </div>
-                            <div class="store-chevron">›</div>
+                            <div class="mt-4 flex items-center justify-between">
+                                <div>
+                                    <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400"><?= e($product['category_name'] ?? 'Store') ?></div>
+                                    <div class="mt-1 text-xl font-black text-accent-900"><?= e(money($product['price'])) ?></div>
+                                </div>
+                                <div class="rounded-full bg-[#edf2ec] px-4 py-2 text-xs font-bold text-accent-800">Lihat detail</div>
+                            </div>
                         </div>
                     </a>
                 </article>
@@ -74,21 +108,5 @@ require __DIR__ . '/partials/header.php';
         </div>
     </section>
 </main>
-<div class="px-4 pb-4 pt-2">
-    <div class="store-bottom-nav grid grid-cols-3 rounded-[30px] px-4 py-4 text-center">
-        <div>
-            <div class="text-sm font-extrabold text-accent-900">Beranda</div>
-            <div class="mt-1 text-[11px] text-slate-500">Store</div>
-        </div>
-        <div>
-            <div class="text-sm font-extrabold text-slate-400">Kategori</div>
-            <div class="mt-1 text-[11px] text-slate-400">Filter</div>
-        </div>
-        <div>
-            <div class="text-sm font-extrabold text-slate-400">Admin</div>
-            <div class="mt-1 text-[11px] text-slate-400">Panel</div>
-        </div>
-    </div>
-</div>
 </div>
 <?php require __DIR__ . '/partials/footer.php'; ?>

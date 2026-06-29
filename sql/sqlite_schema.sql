@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT NULL,
     price NUMERIC NOT NULL DEFAULT 0,
     badge TEXT NULL,
+    image_url TEXT NULL,
     is_active INTEGER NOT NULL DEFAULT 1,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT DEFAULT CURRENT_TIMESTAMP,

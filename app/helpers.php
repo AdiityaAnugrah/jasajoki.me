@@ -282,14 +282,15 @@ function products_save(array $data, ?int $id = null): void
         'description' => trim((string) $data['description']),
         'price' => (float) $data['price'],
         'badge' => trim((string) $data['badge']),
+        'image_url' => trim((string) ($data['image_url'] ?? '')),
         'is_active' => !empty($data['is_active']) ? 1 : 0,
     ];
 
     if ($id) {
         $payload['id'] = $id;
-        $sql = 'UPDATE products SET category_id = :category_id, name = :name, slug = :slug, description = :description, price = :price, badge = :badge, is_active = :is_active WHERE id = :id';
+        $sql = 'UPDATE products SET category_id = :category_id, name = :name, slug = :slug, description = :description, price = :price, badge = :badge, image_url = :image_url, is_active = :is_active WHERE id = :id';
     } else {
-        $sql = 'INSERT INTO products (category_id, name, slug, description, price, badge, is_active) VALUES (:category_id, :name, :slug, :description, :price, :badge, :is_active)';
+        $sql = 'INSERT INTO products (category_id, name, slug, description, price, badge, image_url, is_active) VALUES (:category_id, :name, :slug, :description, :price, :badge, :image_url, :is_active)';
     }
 
     $statement = db()->prepare($sql);
@@ -628,6 +629,7 @@ function sample_products(): array
             'price' => 22000,
             'badge' => 'Best Seller',
             'description' => 'Proses cepat 1-5 menit setelah pembayaran.',
+            'image_url' => '',
             'is_active' => 1,
         ],
         [
@@ -640,6 +642,7 @@ function sample_products(): array
             'price' => 150000,
             'badge' => 'Populer',
             'description' => 'Aman, update progres harian, bisa request hero.',
+            'image_url' => '',
             'is_active' => 1,
         ],
         [
@@ -652,6 +655,7 @@ function sample_products(): array
             'price' => 25000,
             'badge' => 'Murah',
             'description' => 'Aktivasi cepat, garansi replace.',
+            'image_url' => '',
             'is_active' => 1,
         ],
     ];
