@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JasaJoki.me</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            cream: '#fff8eb',
+                            beige: '#f7e4bb',
+                            teal: '#214943',
+                            dark: '#153c36',
+                            soft: '#edf2ec'
+                        }
+                    },
+                    boxShadow: {
+                        soft: '0 18px 36px rgba(24,57,53,0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-cream font-[Manrope] text-slate-800">
+    <div class="min-h-screen bg-[linear-gradient(180deg,#fff8eb_0%,#f7e4bb_100%)]">
+        <header class="mx-auto flex max-w-7xl items-center justify-between px-5 py-6 lg:px-8">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-[0.28em] text-brand-teal">JasaJoki.me</p>
+                <h1 class="mt-1 text-lg font-extrabold text-brand-dark">Portal layanan digital & premium</h1>
+            </div>
+            <div class="hidden items-center gap-6 text-sm font-semibold text-slate-600 md:flex">
+                <a href="#fitur">Fitur</a>
+                <a href="#layanan">Layanan</a>
+                <a href="#faq">FAQ</a>
+                <a href="/store/" class="rounded-full border-2 border-brand-teal px-5 py-2 text-brand-teal">Masuk Store</a>
+            </div>
+        </header>
+
+        <section class="mx-auto grid max-w-7xl items-center gap-10 px-5 pb-16 pt-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:pb-24">
+            <div>
+                <p class="text-sm font-bold uppercase tracking-[0.28em] text-brand-teal">Akses layanan digital lebih simpel</p>
+                <h2 class="mt-5 max-w-3xl text-5xl font-black leading-[0.95] tracking-[-0.05em] text-brand-dark md:text-7xl">Beli akun, joki, dan layanan premium dari satu portal.</h2>
+                <p class="mt-6 max-w-2xl text-base leading-8 text-slate-600">JasaJoki.me membantu kamu mendapatkan layanan digital yang cepat, praktis, dan mudah dibeli. Mulai dari akun premium, jasa joki, hingga produk digital dengan alur order yang rapi.</p>
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <a href="/store/" class="rounded-full bg-brand-teal px-7 py-4 text-sm font-bold text-white shadow-soft">Masuk Ke Store</a>
+                    <a href="/store/admin/login.php" class="rounded-full border border-brand-teal/20 bg-white/80 px-7 py-4 text-sm font-bold text-brand-dark">Panel Admin</a>
+                </div>
+                <div class="mt-10 grid gap-4 sm:grid-cols-3">
+                    <div class="rounded-3xl bg-white/85 p-5 shadow-soft">
+                        <div class="text-2xl font-black text-brand-dark">Fast</div>
+                        <div class="mt-2 text-sm text-slate-500">Checkout yang rapi dan ringan.</div>
+                    </div>
+                    <div class="rounded-3xl bg-white/85 p-5 shadow-soft">
+                        <div class="text-2xl font-black text-brand-dark">QRIS</div>
+                        <div class="mt-2 text-sm text-slate-500">Siap integrasi pembayaran digital.</div>
+                    </div>
+                    <div class="rounded-3xl bg-white/85 p-5 shadow-soft">
+                        <div class="text-2xl font-black text-brand-dark">Stock</div>
+                        <div class="mt-2 text-sm text-slate-500">Manajemen akun & stok lebih praktis.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-[36px] bg-white/88 p-5 shadow-soft">
+                <div class="rounded-[30px] bg-brand-soft p-5">
+                    <div class="text-sm font-bold uppercase tracking-[0.2em] text-brand-teal">Tentang kami</div>
+                    <h3 class="mt-3 text-3xl font-black leading-tight text-brand-dark">Store digital yang fokus pada kemudahan order & pengelolaan.</h3>
+                    <p class="mt-4 text-sm leading-7 text-slate-600">Kami membangun JasaJoki.me sebagai portal ringan yang bisa dipakai untuk menjual akun, stok premium, joki, dan berbagai layanan digital dengan desain yang bersih serta profesional.</p>
+                </div>
+                <div class="mt-5 grid gap-4">
+                    <div class="flex items-start gap-4 rounded-[28px] bg-white p-4 shadow-soft">
+                        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft text-2xl text-brand-teal">✓</div>
+                        <div>
+                            <div class="text-lg font-extrabold text-brand-dark">Store mobile-first</div>
+                            <p class="mt-1 text-sm text-slate-500">Tampilan customer dibuat nyaman dipakai dari HP.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 rounded-[28px] bg-white p-4 shadow-soft">
+                        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft text-2xl text-brand-teal">✓</div>
+                        <div>
+                            <div class="text-lg font-extrabold text-brand-dark">Admin desktop-first</div>
+                            <p class="mt-1 text-sm text-slate-500">Cocok untuk operasional produk, stok akun, dan order.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4 rounded-[28px] bg-white p-4 shadow-soft">
+                        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft text-2xl text-brand-teal">✓</div>
+                        <div>
+                            <div class="text-lg font-extrabold text-brand-dark">Tripay-ready</div>
+                            <p class="mt-1 text-sm text-slate-500">Flow pembayaran dan invoice sudah disiapkan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fitur" class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+            <div class="max-w-2xl">
+                <p class="text-sm font-bold uppercase tracking-[0.28em] text-brand-teal">Fitur dan kelebihan kami</p>
+                <h3 class="mt-4 text-4xl font-black tracking-[-0.04em] text-brand-dark">Kenapa JasaJoki.me cocok untuk toko digital kamu?</h3>
+            </div>
+            <div class="mt-10 grid gap-6 lg:grid-cols-3">
+                <div class="rounded-[32px] bg-white p-6 shadow-soft">
+                    <div class="text-lg font-extrabold text-brand-dark">Store yang ringan</div>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">Fokus pada kecepatan, tampilan rapih, dan checkout yang nyaman untuk user mobile.</p>
+                </div>
+                <div class="rounded-[32px] bg-white p-6 shadow-soft">
+                    <div class="text-lg font-extrabold text-brand-dark">Panel admin yang profesional</div>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">Kelola produk, kategori, stok akun, transaksi, dan pengaturan tanpa tampilan yang terlalu ramai.</p>
+                </div>
+                <div class="rounded-[32px] bg-white p-6 shadow-soft">
+                    <div class="text-lg font-extrabold text-brand-dark">Cocok untuk akun premium & joki</div>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">Sistem disiapkan untuk kebutuhan akun, password, 2FA, hingga penjualan layanan digital lain.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="layanan" class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+            <div class="grid gap-6 lg:grid-cols-3">
+                <div class="rounded-[32px] bg-white p-6 shadow-soft">
+                    <div class="text-sm font-bold uppercase tracking-[0.2em] text-brand-teal">Layanan</div>
+                    <div class="mt-4 text-2xl font-black text-brand-dark">Akun Premium</div>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">Kelola stok akun berdasarkan email, password, dan 2FA langsung dari panel admin.</p>
+                </div>
+                <div class="rounded-[32px] bg-white p-6 shadow-soft">
+                    <div class="text-sm font-bold uppercase tracking-[0.2em] text-brand-teal">Layanan</div>
+                    <div class="mt-4 text-2xl font-black text-brand-dark">Joki & Layanan Digital</div>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">Cocok untuk menjual jasa joki, jasa digital, top up, maupun produk custom lainnya.</p>
+                </div>
+                <div class="rounded-[32px] bg-white p-6 shadow-soft">
+                    <div class="text-sm font-bold uppercase tracking-[0.2em] text-brand-teal">Layanan</div>
+                    <div class="mt-4 text-2xl font-black text-brand-dark">Checkout & Invoice</div>
+                    <p class="mt-3 text-sm leading-7 text-slate-500">Alur pembayaran, invoice, dan callback siap dikembangkan lebih lanjut sesuai kebutuhan bisnis.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="mx-auto max-w-7xl px-5 pb-20 pt-8 lg:px-8">
+            <div class="rounded-[36px] bg-[#143c36] p-8 text-white shadow-soft lg:p-10">
+                <p class="text-sm font-bold uppercase tracking-[0.28em] text-brand-beige">FAQ singkat</p>
+                <div class="mt-5 grid gap-5 lg:grid-cols-3">
+                    <div class="rounded-[24px] bg-white/10 p-5">
+                        <div class="text-lg font-extrabold">Bisa jual akun premium?</div>
+                        <p class="mt-2 text-sm leading-7 text-brand-100">Bisa. Bahkan stok akun sudah mendukung format email, password, dan 2FA.</p>
+                    </div>
+                    <div class="rounded-[24px] bg-white/10 p-5">
+                        <div class="text-lg font-extrabold">Bisa dipakai untuk joki?</div>
+                        <p class="mt-2 text-sm leading-7 text-brand-100">Bisa. Produk dan order bisa diatur untuk layanan digital maupun jasa joki.</p>
+                    </div>
+                    <div class="rounded-[24px] bg-white/10 p-5">
+                        <div class="text-lg font-extrabold">Pembayaran sudah siap?</div>
+                        <p class="mt-2 text-sm leading-7 text-brand-100">Flow Tripay sudah disiapkan dan bisa diteruskan ke tahap operasional penuh.</p>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <a href="/store/" class="inline-flex rounded-full bg-white px-7 py-4 text-sm font-black text-brand-dark">Buka Store Sekarang</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
