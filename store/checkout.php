@@ -79,41 +79,64 @@ $pageTitle = 'Checkout - ' . $product['name'];
 require __DIR__ . '/partials/header.php';
 ?>
 <div class="mobile-shell min-h-screen">
-<main class="px-4 pb-8 pt-4">
-    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="text-sm font-semibold text-accent-700">← Edit data</a>
-    <h1 class="mt-4 text-[30px] font-black text-accent-900">Checkout</h1>
-    <p class="mt-1 text-sm text-slate-500">Review pesanan dan lanjutkan ke pembayaran dengan tampilan yang lebih sederhana.</p>
+<main class="store-container px-4 pb-10 pt-5 md:px-6 lg:px-8">
+    <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="text-sm font-semibold text-[#f0dfbf]">← Kembali ke detail produk</a>
 
-    <section class="card-soft mt-5 rounded-[32px] p-5">
-        <div class="flex items-center justify-between">
-            <div>
-                <div class="text-xs text-slate-500">Produk</div>
-                <div class="font-bold"><?= e($product['name']) ?></div>
+    <section class="mt-4 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <div class="card-soft rounded-[32px] p-5 md:p-7">
+            <p class="store-kicker text-xs font-bold uppercase tracking-[0.24em]">Checkout summary</p>
+            <h1 class="store-heading mt-4 text-[34px] font-black leading-[0.95] text-[#f7f3ea] md:text-[48px]">Review pesananmu sebelum lanjut ke pembayaran.</h1>
+            <p class="store-muted mt-4 text-sm leading-7">Semua data sudah kami siapkan. Lanjutkan ke invoice untuk scan QRIS dan pantau status transaksi.</p>
+
+            <div class="store-line mt-6 space-y-4 border-t pt-6">
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#cab38f]">Produk</div>
+                        <div class="mt-2 text-xl font-black text-[#f7f3ea]"><?= e($product['name']) ?></div>
+                    </div>
+                    <div class="store-cta rounded-full px-4 py-2 text-xs font-bold"><?= e($product['badge'] ?: 'Ready') ?></div>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2">
+                    <div class="store-stat p-4">
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#cab38f]">Harga produk</div>
+                        <div class="mt-2 text-2xl font-black text-[#f7f3ea]"><?= e(money($product['price'])) ?></div>
+                    </div>
+                    <div class="store-stat p-4">
+                        <div class="text-xs uppercase tracking-[0.18em] text-[#cab38f]">Metode</div>
+                        <div class="mt-2 text-2xl font-black text-[#f7f3ea]">QRIS</div>
+                    </div>
+                </div>
+                <div class="rounded-[24px] border border-white/8 bg-white/4 p-4">
+                    <div class="text-sm font-semibold text-[#f7f3ea]"><?= e($customerName) ?></div>
+                    <div class="store-muted mt-1 text-sm"><?= e($customerEmail) ?></div>
+                    <div class="store-muted mt-1 text-sm"><?= e($customerWhatsapp) ?></div>
+                    <div class="store-muted mt-2 text-sm">Akun/UID: <?= e($customerAccount) ?></div>
+                </div>
             </div>
-            <div class="text-lg font-extrabold text-accent-900"><?= e(money($product['price'])) ?></div>
         </div>
-    </section>
 
-    <section class="card-soft mt-5 rounded-[32px] p-5">
-        <h2 class="text-base font-bold text-accent-900">Metode pembayaran</h2>
-        <div class="mt-3 rounded-2xl border border-brand-200 bg-[#fffdf8] px-4 py-4">
-            <div class="font-semibold text-accent-900">QRIS Dinamis</div>
-            <div class="text-xs text-slate-500">Diproses melalui QRISify</div>
-        </div>
-        <div class="mt-4 rounded-2xl <?= ($qrisifyResponse['success'] ?? false) ? 'bg-accent-50 text-accent-700' : 'bg-brand-100/60 text-slate-700' ?> p-4 text-sm">
-            <?php if ($createdOrderCode): ?>
-                Order berhasil dibuat dengan kode <strong><?= e($createdOrderCode) ?></strong>.
-                <?php if ($qrisifyResponse && !($qrisifyResponse['success'] ?? false)): ?>
-                    <div class="mt-2"><?= e($qrisifyResponse['message']) ?></div>
-                <?php elseif (!empty($qrisifyResponse['data']['transaction_id'])): ?>
-                    <div class="mt-2">QR pembayaran berhasil dibuat. Lanjut ke invoice untuk scan dan pantau statusnya.</div>
+        <div class="card-soft rounded-[32px] p-5 md:p-7">
+            <p class="store-kicker text-xs font-bold uppercase tracking-[0.24em]">Payment status</p>
+            <h2 class="mt-3 text-2xl font-black text-[#f7f3ea]">QRISify QRIS</h2>
+            <div class="mt-4 rounded-[24px] <?= ($qrisifyResponse['success'] ?? false) ? 'bg-[#f0dfbf] text-[#171717]' : 'bg-white/6 text-[#f7f3ea]' ?> p-4 text-sm leading-6">
+                <?php if ($createdOrderCode): ?>
+                    Order berhasil dibuat dengan kode <strong><?= e($createdOrderCode) ?></strong>.
+                    <?php if ($qrisifyResponse && !($qrisifyResponse['success'] ?? false)): ?>
+                        <div class="mt-2"><?= e($qrisifyResponse['message']) ?></div>
+                    <?php elseif (!empty($qrisifyResponse['data']['transaction_id'])): ?>
+                        <div class="mt-2">QR pembayaran berhasil dibuat. Buka invoice untuk scan QR dan refresh status pembayaran.</div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    Integrasi pembayaran belum aktif sempurna.
                 <?php endif; ?>
-            <?php else: ?>
-                Integrasi pembayaran belum aktif sempurna.
-            <?php endif; ?>
-        </div>
-        <div class="mt-4 grid gap-3">
-            <a href="<?= e(route_url('invoice.php?code=' . urlencode($createdOrderCode ?: ('DEMO-' . $product['id'])))) ?>" class="inline-flex w-full justify-center rounded-2xl bg-accent-700 px-4 py-3 text-sm font-semibold text-white">Lihat invoice</a>
+            </div>
+
+            <div class="store-line mt-6 border-t pt-6">
+                <div class="grid gap-3">
+                    <a href="<?= e(route_url('invoice.php?code=' . urlencode($createdOrderCode ?: ('DEMO-' . $product['id'])))) ?>" class="store-cta inline-flex w-full justify-center rounded-2xl px-4 py-3 text-sm font-semibold">Buka invoice pembayaran</a>
+                    <a href="<?= e(route_url()) ?>" class="store-outline inline-flex w-full justify-center rounded-2xl px-4 py-3 text-sm font-semibold">Kembali ke katalog</a>
+                </div>
+            </div>
         </div>
     </section>
 </main>
