@@ -32,50 +32,51 @@ $success = flash('success');
 require __DIR__ . '/partials/layout-top.php';
 ?>
 <section class="grid gap-6 2xl:grid-cols-[380px_1fr]">
-    <form method="post" class="space-y-4 rounded-3xl bg-white p-6 shadow-soft">
+    <form method="post" class="admin-panel space-y-5 p-6">
         <input type="hidden" name="action" value="save">
         <input type="hidden" name="id" value="<?= e($editing['id'] ?? '') ?>">
         <div>
-            <h3 class="text-xl font-bold"><?= $editing ? 'Edit kategori' : 'Tambah kategori' ?></h3>
-            <p class="text-sm text-slate-500">Atur struktur kategori produk agar navigasi store lebih rapi.</p>
+            <p class="text-xs font-bold uppercase tracking-[0.22em] text-accent-700">Kategori store</p>
+            <h3 class="mt-2 text-2xl font-black text-accent-900"><?= $editing ? 'Edit kategori' : 'Tambah kategori' ?></h3>
+            <p class="mt-2 text-sm text-slate-500">Atur struktur kategori produk agar navigasi store lebih rapi.</p>
         </div>
         <?php if ($success): ?>
-            <div class="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700"><?= e($success) ?></div>
+            <div class="rounded-[20px] bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700"><?= e($success) ?></div>
         <?php endif; ?>
         <div>
             <label class="mb-2 block text-sm font-semibold">Nama kategori</label>
-            <input name="name" value="<?= e($editing['name'] ?? '') ?>" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm" required>
+            <input name="name" value="<?= e($editing['name'] ?? '') ?>" class="admin-input" required>
         </div>
         <div>
             <label class="mb-2 block text-sm font-semibold">Slug</label>
-            <input name="slug" value="<?= e($editing['slug'] ?? '') ?>" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm" placeholder="opsional-auto-generated">
+            <input name="slug" value="<?= e($editing['slug'] ?? '') ?>" class="admin-input" placeholder="opsional-auto-generated">
         </div>
         <div>
             <label class="mb-2 block text-sm font-semibold">Urutan tampil</label>
-            <input name="sort_order" value="<?= e(isset($editing['sort_order']) ? (string) $editing['sort_order'] : '0') ?>" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm">
+            <input name="sort_order" value="<?= e(isset($editing['sort_order']) ? (string) $editing['sort_order'] : '0') ?>" class="admin-input">
         </div>
-        <label class="flex items-center gap-2 text-sm">
+        <label class="flex items-center gap-3 rounded-[20px] bg-[#faf4e6] px-4 py-3 text-sm font-semibold text-slate-700">
             <input type="checkbox" name="is_active" value="1" <?= !isset($editing['is_active']) || (int) $editing['is_active'] === 1 ? 'checked' : '' ?>>
             Kategori aktif
         </label>
         <div class="flex gap-3">
-            <button type="submit" class="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white">Simpan kategori</button>
-            <a href="<?= e(route_url('admin/categories.php')) ?>" class="rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700">Reset</a>
+            <button type="submit" class="btn-primary-soft px-5 py-3 text-sm">Simpan kategori</button>
+            <a href="<?= e(route_url('admin/categories.php')) ?>" class="btn-secondary-soft px-5 py-3 text-sm">Reset</a>
         </div>
     </form>
 
-    <div class="rounded-3xl bg-white p-6 shadow-soft">
+    <div class="admin-panel p-6">
         <div class="mb-4 flex items-center justify-between">
             <div>
-                <h3 class="text-xl font-bold">Daftar Kategori</h3>
+                <h3 class="text-xl font-black text-accent-900">Daftar Kategori</h3>
                 <p class="text-sm text-slate-500">Pastikan kategori aktif dan urutan tampil sesuai kebutuhan.</p>
             </div>
-            <div class="text-sm text-slate-500"><?= count($categories) ?> kategori</div>
+            <div class="rounded-full bg-[#edf2ec] px-4 py-2 text-sm font-bold text-accent-800"><?= count($categories) ?> kategori</div>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full text-left text-sm">
                 <thead>
-                <tr class="border-b border-slate-100 text-slate-500">
+                <tr class="border-b border-stone-200 text-slate-500">
                     <th class="pb-3 pr-4">Kategori</th>
                     <th class="pb-3 pr-4">Slug</th>
                     <th class="pb-3 pr-4">Urutan</th>
@@ -85,22 +86,22 @@ require __DIR__ . '/partials/layout-top.php';
                 </thead>
                 <tbody>
                 <?php foreach ($categories as $category): ?>
-                    <tr class="border-b border-slate-50">
-                        <td class="py-4 pr-4 font-semibold"><?= e($category['name']) ?></td>
+                    <tr class="border-b border-stone-100 last:border-b-0">
+                        <td class="py-4 pr-4 font-bold text-accent-900"><?= e($category['name']) ?></td>
                         <td class="py-4 pr-4 text-slate-500"><?= e($category['slug']) ?></td>
-                        <td class="py-4 pr-4"><?= e((string) ($category['sort_order'] ?? 0)) ?></td>
+                        <td class="py-4 pr-4 font-semibold"><?= e((string) ($category['sort_order'] ?? 0)) ?></td>
                         <td class="py-4 pr-4">
-                            <span class="rounded-full px-3 py-1 text-xs font-semibold <?= !empty($category['is_active']) ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-700' ?>">
+                            <span class="rounded-full px-3 py-1 text-xs font-semibold <?= !empty($category['is_active']) ? 'bg-emerald-50 text-emerald-700' : 'bg-stone-100 text-slate-700' ?>">
                                 <?= !empty($category['is_active']) ? 'Aktif' : 'Nonaktif' ?>
                             </span>
                         </td>
                         <td class="py-4">
                             <div class="flex gap-2">
-                                <a href="<?= e(route_url('admin/categories.php?edit=' . $category['id'])) ?>" class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold">Edit</a>
+                                <a href="<?= e(route_url('admin/categories.php?edit=' . $category['id'])) ?>" class="btn-secondary-soft px-3 py-2 text-xs">Edit</a>
                                 <form method="post" onsubmit="return confirm('Hapus kategori ini? Produk di kategori ini juga bisa terdampak.');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="id" value="<?= e((string) $category['id']) ?>">
-                                    <button type="submit" class="rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white">Hapus</button>
+                                    <button type="submit" class="rounded-2xl bg-rose-600 px-3 py-2 text-xs font-bold text-white">Hapus</button>
                                 </form>
                             </div>
                         </td>

@@ -41,19 +41,20 @@ require __DIR__ . '/partials/layout-top.php';
 ?>
 <section class="grid gap-6 2xl:grid-cols-[460px_1fr]">
     <div class="space-y-6">
-        <div class="rounded-3xl bg-white p-6 shadow-soft">
+        <div class="admin-panel p-6">
             <div>
-                <h3 class="text-xl font-bold">Import stok akun</h3>
-                <p class="mt-1 text-sm text-slate-500">Format per baris: <strong>email | password | 2fa</strong></p>
+                <p class="text-xs font-bold uppercase tracking-[0.22em] text-accent-700">Inventory</p>
+                <h3 class="mt-2 text-2xl font-black text-accent-900">Import stok akun</h3>
+                <p class="mt-2 text-sm text-slate-500">Format per baris: <strong>email | password | 2fa</strong></p>
             </div>
             <?php if ($success): ?>
-                <div class="mt-4 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700"><?= e($success) ?></div>
+                <div class="mt-4 rounded-[20px] bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700"><?= e($success) ?></div>
             <?php endif; ?>
             <form method="post" class="mt-5 space-y-4">
                 <input type="hidden" name="action" value="import">
                 <div>
                     <label class="mb-2 block text-sm font-semibold">Produk tujuan</label>
-                    <select name="product_id" class="w-full rounded-2xl border border-stone-300 bg-[#fcfcfa] px-4 py-3 text-sm">
+                    <select name="product_id" class="admin-select">
                         <?php foreach ($products as $product): ?>
                             <option value="<?= e((string) $product['id']) ?>" <?= $productId === (int) $product['id'] ? 'selected' : '' ?>><?= e($product['name']) ?></option>
                         <?php endforeach; ?>
@@ -61,14 +62,14 @@ require __DIR__ . '/partials/layout-top.php';
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-semibold">Bulk stok</label>
-                    <textarea name="bulk_stock" class="min-h-[280px] w-full rounded-2xl border border-stone-300 bg-[#fcfcfa] px-4 py-3 text-sm font-mono" placeholder="bookers_tapper.5m+zabmgd@icloud.com | ;lsdjjii87as# | CJMPW24QAI4SCFEH7GG2LNYMWLK7RQP3"></textarea>
+                    <textarea name="bulk_stock" class="admin-textarea min-h-[280px] font-mono" placeholder="bookers_tapper.5m+zabmgd@icloud.com | ;lsdjjii87as# | CJMPW24QAI4SCFEH7GG2LNYMWLK7RQP3"></textarea>
                 </div>
-                <button type="submit" class="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white">Import stok</button>
+                <button type="submit" class="btn-primary-soft px-5 py-3 text-sm">Import stok</button>
             </form>
         </div>
 
-        <div class="rounded-3xl bg-[#1c1c19] p-6 text-white shadow-soft">
-            <h3 class="text-lg font-bold">Ringkasan stok</h3>
+        <div class="rounded-[30px] bg-[#163933] p-6 text-white shadow-soft">
+            <h3 class="text-lg font-black">Ringkasan stok</h3>
             <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div class="rounded-2xl bg-white/5 p-4">
                     <div class="text-slate-300">Available</div>
@@ -90,15 +91,15 @@ require __DIR__ . '/partials/layout-top.php';
         </div>
     </div>
 
-    <div class="rounded-3xl bg-white p-6 shadow-soft">
+    <div class="admin-panel p-6">
         <div class="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h3 class="text-xl font-bold">Daftar stok</h3>
+                <h3 class="text-xl font-black text-accent-900">Daftar stok</h3>
                 <p class="text-sm text-slate-500">Kelola stok akun per produk dengan status available, reserved, atau sold.</p>
             </div>
             <div class="flex flex-wrap gap-2">
                 <?php foreach (['ALL', 'available', 'reserved', 'sold'] as $status): ?>
-                    <a href="<?= e(route_url('admin/stocks.php?product_id=' . $productId . '&status=' . $status)) ?>" class="rounded-2xl px-4 py-2 text-sm font-semibold <?= strtolower($statusFilter) === strtolower($status) ? 'bg-slate-900 text-white' : 'border border-stone-300 text-slate-700' ?>">
+                    <a href="<?= e(route_url('admin/stocks.php?product_id=' . $productId . '&status=' . $status)) ?>" class="rounded-full px-4 py-2 text-sm font-bold <?= strtolower($statusFilter) === strtolower($status) ? 'bg-[#214943] text-white' : 'border border-stone-300 bg-[#fffefb] text-slate-700' ?>">
                         <?= e(strtoupper($status)) ?>
                     </a>
                 <?php endforeach; ?>
@@ -119,8 +120,8 @@ require __DIR__ . '/partials/layout-top.php';
                 </thead>
                 <tbody>
                 <?php foreach ($stocks as $stock): ?>
-                    <tr class="border-b border-slate-50 align-top">
-                        <td class="py-4 pr-4 font-semibold"><?= e($stock['product_name']) ?></td>
+                    <tr class="border-b border-stone-100 align-top last:border-b-0">
+                        <td class="py-4 pr-4 font-bold text-accent-900"><?= e($stock['product_name']) ?></td>
                         <td class="py-4 pr-4"><?= e($stock['account_email']) ?></td>
                         <td class="py-4 pr-4 font-mono text-xs"><?= e($stock['account_password']) ?></td>
                         <td class="py-4 pr-4 font-mono text-xs"><?= e($stock['account_2fa'] ?: '-') ?></td>
@@ -136,13 +137,13 @@ require __DIR__ . '/partials/layout-top.php';
                                         <input type="hidden" name="action" value="status">
                                         <input type="hidden" name="stock_id" value="<?= e((string) $stock['id']) ?>">
                                         <input type="hidden" name="stock_status" value="<?= e($status) ?>">
-                                        <button type="submit" class="rounded-xl border border-stone-300 px-3 py-2 text-xs font-semibold text-slate-700"><?= e(ucfirst($status)) ?></button>
+                                        <button type="submit" class="btn-secondary-soft px-3 py-2 text-xs"><?= e(ucfirst($status)) ?></button>
                                     </form>
                                 <?php endforeach; ?>
                                 <form method="post" onsubmit="return confirm('Hapus stok ini?');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="stock_id" value="<?= e((string) $stock['id']) ?>">
-                                    <button type="submit" class="rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white">Hapus</button>
+                                    <button type="submit" class="rounded-2xl bg-rose-600 px-3 py-2 text-xs font-bold text-white">Hapus</button>
                                 </form>
                             </div>
                         </td>

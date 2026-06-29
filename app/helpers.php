@@ -378,6 +378,11 @@ function order_update_status_by_reference(string $merchantRef, string $tripayRef
     ]);
 }
 
+function order_update_status_by_code(string $orderCode, string $paymentStatus): void
+{
+    order_update_status_by_reference($orderCode, $orderCode, $paymentStatus);
+}
+
 function payment_log_create(?int $orderId, string $source, string $payload): void
 {
     if (!$orderId) {
@@ -582,11 +587,13 @@ function admin_order_status_badge(string $status): string
 
 function admin_payment_health(): string
 {
-    if (!tripay_has_credentials()) {
-        return 'Kredensial belum lengkap';
+    $apiKey = trim((string) (app_config()['qrisify']['api_key'] ?? ''));
+    if ($apiKey === '') {
+        return 'Kredensial QRISify belum lengkap';
     }
 
-    return tripay_is_production() ? 'Tripay Production Aktif' : 'Tripay Sandbox Aktif';
+    $mode = strtoupper((string) (app_config()['qrisify']['mode'] ?? 'TEST'));
+    return $mode === 'LIVE' ? 'QRISify Live Aktif' : 'QRISify Test Aktif';
 }
 
 function stock_status_badge(string $status): string

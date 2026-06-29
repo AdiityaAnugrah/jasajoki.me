@@ -58,6 +58,12 @@ return [
         'callback_url' => env_value('TRIPAY_CALLBACK_URL', '/store/callback-tripay.php'),
         'return_url' => env_value('TRIPAY_RETURN_URL', '/store/invoice.php'),
     ],
+    'qrisify' => [
+        'api_key' => env_value('QRISIFY_API_KEY', ''),
+        'mode' => env_value('QRISIFY_MODE', 'TEST'),
+        'webhook_secret' => env_value('QRISIFY_WEBHOOK_SECRET', ''),
+        'webhook_url' => env_value('QRISIFY_WEBHOOK_URL', ''),
+    ],
     'mail' => [
         'username' => env_value('EMAIL_USER', ''),
         'password' => env_value('EMAIL_PASS', ''),

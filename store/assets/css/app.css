@@ -27,6 +27,12 @@ body {
     box-shadow: 0 18px 35px rgba(24, 57, 53, 0.08);
 }
 
+.card-soft {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(21, 60, 54, 0.08);
+    box-shadow: 0 18px 35px rgba(24, 57, 53, 0.08);
+}
+
 .store-icon-bubble {
     width: 56px;
     height: 56px;

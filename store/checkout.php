@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../app/tripay.php';
+require_once __DIR__ . '/../app/qrisify.php';
 
 if (!is_post()) {
     redirect(route_url());
@@ -23,16 +23,8 @@ if (
     redirect(route_url());
 }
 
-$selectedChannel = (string) request_post('payment_channel', tripay_default_method());
-$channels = tripay_payment_channels();
-$validChannelCodes = array_column($channels, 'code');
-
-if (!in_array($selectedChannel, $validChannelCodes, true)) {
-    $selectedChannel = 'QRIS';
-}
-
 $createdOrderCode = null;
-$tripayResponse = null;
+$qrisifyResponse = null;
 
 if (app_is_installed()) {
     $createdOrderCode = orders_create([
@@ -43,55 +35,41 @@ if (app_is_installed()) {
         'customer_whatsapp' => $customerWhatsapp,
         'customer_notes' => $customerNotes,
         'amount' => $product['price'],
-        'payment_channel' => $selectedChannel,
+        'payment_channel' => 'QRIS',
     ]);
 
-    if (tripay_has_credentials()) {
-        $callbackUrl = rtrim(app_config()['base_url'], '/') . '/callback-tripay.php';
-        $returnUrl = rtrim(app_config()['base_url'], '/') . '/invoice.php?code=' . urlencode($createdOrderCode);
-
-        $tripayResponse = tripay_create_transaction([
-            'method' => $selectedChannel,
-            'merchant_ref' => $createdOrderCode,
+    if (qrisify_has_credentials()) {
+        $qrisifyResponse = qrisify_create_transaction([
             'amount' => (int) $product['price'],
-            'customer_name' => $customerName,
-            'customer_email' => $customerEmail,
-            'customer_phone' => $customerWhatsapp,
-            'order_items' => [[
-                'sku' => $product['slug'],
-                'name' => $product['name'],
-                'price' => (int) $product['price'],
-                'quantity' => 1,
-                'product_url' => rtrim(app_config()['base_url'], '/') . '/product.php?slug=' . $product['slug'],
-            ]],
-            'callback_url' => $callbackUrl,
-            'return_url' => $returnUrl,
-            'expired_time' => time() + (24 * 60 * 60),
+            'external_id' => $createdOrderCode,
+            'expiry_minutes' => 15,
+            'webhook_url' => qrisify_webhook_url(),
+            'webhook_secret' => qrisify_config()['webhook_secret'],
         ]);
 
         $order = order_find_by_code($createdOrderCode);
         if ($order) {
-            payment_log_create((int) $order['id'], 'tripay_create', json_encode($tripayResponse, JSON_UNESCAPED_SLASHES));
+            payment_log_create((int) $order['id'], 'qrisify_create', json_encode($qrisifyResponse, JSON_UNESCAPED_SLASHES));
         }
 
-        if (($tripayResponse['success'] ?? false) && !empty($tripayResponse['data'])) {
-            $tripayData = $tripayResponse['data'];
+        if (($qrisifyResponse['success'] ?? false) && !empty($qrisifyResponse['data'])) {
+            $qrisifyData = $qrisifyResponse['data'];
             order_update_tripay_data($createdOrderCode, [
-                'tripay_reference' => $tripayData['reference'] ?? null,
-                'payment_channel' => $tripayData['payment_method'] ?? $selectedChannel,
-                'payment_status' => $tripayData['status'] ?? 'UNPAID',
-                'tripay_checkout_url' => $tripayData['checkout_url'] ?? null,
-                'tripay_pay_code' => $tripayData['pay_code'] ?? null,
-                'tripay_pay_url' => $tripayData['pay_url'] ?? null,
-                'tripay_qr_url' => $tripayData['qr_url'] ?? null,
-                'tripay_qr_string' => $tripayData['qr_string'] ?? null,
-                'expired_time' => $tripayData['expired_time'] ?? null,
+                'tripay_reference' => $qrisifyData['transaction_id'] ?? null,
+                'payment_channel' => 'QRIS',
+                'payment_status' => qrisify_normalize_status((string) ($qrisifyData['status'] ?? 'PENDING')),
+                'tripay_checkout_url' => null,
+                'tripay_pay_code' => (string) ($qrisifyData['amount_total'] ?? ''),
+                'tripay_pay_url' => null,
+                'tripay_qr_url' => qrisify_qr_image_url($qrisifyData['qr_image_url'] ?? null),
+                'tripay_qr_string' => $qrisifyData['qris_string'] ?? null,
+                'expired_time' => !empty($qrisifyData['expires_at']) ? strtotime((string) $qrisifyData['expires_at']) : null,
             ]);
         }
     } else {
-        $tripayResponse = [
+        $qrisifyResponse = [
             'success' => false,
-            'message' => 'Kredensial Tripay belum diisi.',
+            'message' => 'Kredensial QRISify belum diisi.',
             'data' => null,
         ];
     }
@@ -118,24 +96,17 @@ require __DIR__ . '/partials/header.php';
 
     <section class="card-soft mt-5 rounded-[32px] p-5">
         <h2 class="text-base font-bold text-accent-900">Metode pembayaran</h2>
-        <div class="mt-3 grid gap-3">
-            <?php foreach ($channels as $channel): ?>
-                <label class="flex items-center justify-between rounded-2xl border border-brand-200 bg-[#fffdf8] px-4 py-4">
-                    <div>
-                        <div class="font-semibold text-accent-900"><?= e($channel['name']) ?></div>
-                        <div class="text-xs text-slate-500"><?= e($channel['code']) ?></div>
-                    </div>
-                    <input type="radio" name="channel" <?= $channel['code'] === $selectedChannel ? 'checked' : '' ?> disabled>
-                </label>
-            <?php endforeach; ?>
+        <div class="mt-3 rounded-2xl border border-brand-200 bg-[#fffdf8] px-4 py-4">
+            <div class="font-semibold text-accent-900">QRIS Dinamis</div>
+            <div class="text-xs text-slate-500">Diproses melalui QRISify</div>
         </div>
-        <div class="mt-4 rounded-2xl <?= ($tripayResponse['success'] ?? false) ? 'bg-accent-50 text-accent-700' : 'bg-brand-100/60 text-slate-700' ?> p-4 text-sm">
+        <div class="mt-4 rounded-2xl <?= ($qrisifyResponse['success'] ?? false) ? 'bg-accent-50 text-accent-700' : 'bg-brand-100/60 text-slate-700' ?> p-4 text-sm">
             <?php if ($createdOrderCode): ?>
                 Order berhasil dibuat dengan kode <strong><?= e($createdOrderCode) ?></strong>.
-                <?php if ($tripayResponse && !($tripayResponse['success'] ?? false)): ?>
-                    <div class="mt-2"><?= e($tripayResponse['message']) ?></div>
-                <?php elseif (!empty($tripayResponse['data']['checkout_url'])): ?>
-                    <div class="mt-2">Transaksi berhasil dibuat. Lanjut ke invoice atau buka halaman pembayaran Tripay.</div>
+                <?php if ($qrisifyResponse && !($qrisifyResponse['success'] ?? false)): ?>
+                    <div class="mt-2"><?= e($qrisifyResponse['message']) ?></div>
+                <?php elseif (!empty($qrisifyResponse['data']['transaction_id'])): ?>
+                    <div class="mt-2">QR pembayaran berhasil dibuat. Lanjut ke invoice untuk scan dan pantau statusnya.</div>
                 <?php endif; ?>
             <?php else: ?>
                 Integrasi pembayaran belum aktif sempurna.
@@ -143,9 +114,6 @@ require __DIR__ . '/partials/header.php';
         </div>
         <div class="mt-4 grid gap-3">
             <a href="<?= e(route_url('invoice.php?code=' . urlencode($createdOrderCode ?: ('DEMO-' . $product['id'])))) ?>" class="inline-flex w-full justify-center rounded-2xl bg-accent-700 px-4 py-3 text-sm font-semibold text-white">Lihat invoice</a>
-            <?php if (!empty($tripayResponse['data']['checkout_url'])): ?>
-                <a href="<?= e($tripayResponse['data']['checkout_url']) ?>" target="_blank" class="inline-flex w-full justify-center rounded-2xl border border-brand-300 px-4 py-3 text-sm font-semibold text-accent-800">Buka checkout Tripay</a>
-            <?php endif; ?>
         </div>
     </section>
 </main>
