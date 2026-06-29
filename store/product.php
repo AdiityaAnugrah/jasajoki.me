@@ -17,7 +17,7 @@ $pageTitle = $product['name'];
 require __DIR__ . '/partials/header.php';
 ?>
 <div class="min-h-screen">
-<main class="store-container px-4 pb-10 pt-5 md:px-6 lg:px-8">
+<main class="store-container px-5 pb-10 pt-5 md:px-7 lg:px-8">
     <a href="<?= e(route_url()) ?>" class="subtle-link text-sm font-semibold">Kembali ke store</a>
 
     <section class="mt-4 grid gap-6 xl:grid-cols-[1fr_0.95fr]">

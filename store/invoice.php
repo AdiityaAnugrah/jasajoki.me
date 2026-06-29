@@ -47,7 +47,7 @@ $pageTitle = 'Invoice ' . $orderCode;
 require __DIR__ . '/partials/header.php';
 ?>
 <div class="min-h-screen">
-<main class="store-container px-4 pb-10 pt-5 md:px-6 lg:px-8">
+<main class="store-container px-5 pb-10 pt-5 md:px-7 lg:px-8">
     <section class="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
         <div class="section-card p-5 md:p-7">
             <p class="eyebrow text-[11px] font-semibold">Invoice pembayaran</p>

@@ -10,7 +10,7 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
     <title><?= e($pageTitle) ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -48,3 +48,21 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
 </head>
 <body>
 <div class="site-shell">
+<header class="site-header">
+    <div class="store-container px-5 py-4 md:px-7 lg:px-8">
+        <div class="site-header-bar">
+            <a href="<?= e(route_url('index.php')) ?>" class="site-brand">
+                <span class="site-brand-mark">J</span>
+                <span>
+                    <span class="site-brand-kicker">Jasajoki</span>
+                    <span class="site-brand-title">Digital Store</span>
+                </span>
+            </a>
+            <nav class="site-nav">
+                <a href="<?= e(route_url('index.php')) ?>" class="site-nav-link">Store</a>
+                <a href="<?= e(app_setting('store_whatsapp') ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', (string) app_setting('store_whatsapp')) : '#') ?>" class="site-nav-link">WhatsApp</a>
+                <a href="<?= e(route_url('admin/login.php')) ?>" class="site-nav-ghost">Admin</a>
+            </nav>
+        </div>
+    </div>
+</header>

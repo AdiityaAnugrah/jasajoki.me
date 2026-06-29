@@ -9,20 +9,7 @@ $appInstalled = app_is_installed();
 require __DIR__ . '/partials/header.php';
 ?>
 <div class="min-h-screen">
-<header class="store-topbar sticky top-0 z-20 px-4 py-5 backdrop-blur-sm">
-    <div class="store-container flex items-center justify-between gap-3">
-        <div>
-            <p class="eyebrow text-[11px] font-semibold">JasaJoki Store</p>
-            <h1 class="mt-1 text-[18px] font-semibold text-[#171411]">Digital account store</h1>
-        </div>
-        <div class="hidden items-center gap-2 md:flex">
-            <span class="store-chip px-4 py-2 text-xs font-semibold">QRIS checkout</span>
-            <span class="store-chip px-4 py-2 text-xs font-semibold">Auto delivery</span>
-        </div>
-    </div>
-</header>
-
-<main class="store-container px-4 pb-12 pt-4 md:px-6 lg:px-8">
+<main class="store-container px-5 pb-12 pt-5 md:px-7 lg:px-8">
     <?php if (!$appInstalled): ?>
         <section class="mb-4 rounded-3xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
             Database belum di-setup. Jalankan <strong>php setup.php</strong> dulu supaya produk, admin, dan order aktif penuh.
@@ -33,7 +20,7 @@ require __DIR__ . '/partials/header.php';
         <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
             <div>
                 <p class="eyebrow text-[11px] font-semibold">Minimal storefront</p>
-                <h2 class="title-display mt-4 max-w-4xl text-[40px] leading-[0.92] text-[#171411] md:text-[58px] lg:text-[78px]">Akun digital yang siap dibeli, dibayar, lalu langsung diambil.</h2>
+                <h2 class="title-display mt-4 max-w-4xl text-[42px] leading-[0.94] text-[#171411] md:text-[60px] lg:text-[78px]">Akun digital yang siap dibeli, dibayar, lalu langsung diambil.</h2>
                 <p class="store-muted mt-5 max-w-2xl text-sm leading-7 md:text-base">Super minimal. Fokus ke produk, detail singkat, checkout cepat, QRIS, lalu data akun tampil otomatis setelah pembayaran berhasil.</p>
                 <div class="mt-6 flex flex-wrap gap-3">
                     <a href="#catalog" class="btn-primary px-5 py-3 text-sm font-semibold">Lihat katalog</a>
