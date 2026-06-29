@@ -1,41 +1,151 @@
 body {
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #fffaf0;
+    font-family: "Manrope", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #fff8eb;
+    color: #173f3a;
+}
+
+.mobile-shell {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top center, rgba(255, 255, 255, 0.45), transparent 28%),
+        linear-gradient(180deg, #fff8eb 0%, #f7e4bb 100%);
+}
+
+.store-topbar {
+    background: transparent;
+}
+
+.store-hero {
+    border-radius: 34px;
+    background: transparent;
+}
+
+.store-card {
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(21, 60, 54, 0.08);
+    box-shadow: 0 18px 35px rgba(24, 57, 53, 0.08);
+}
+
+.store-icon-bubble {
+    width: 56px;
+    height: 56px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background: #edf2ec;
+    color: #214943;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.store-chevron {
+    width: 46px;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #edf2ec;
+    color: #214943;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.store-pill {
+    border-radius: 999px;
+    border: 2px solid #214943;
+    background: rgba(255, 255, 255, 0.6);
+    color: #173f3a;
+}
+
+.store-pill-active {
+    background: #214943;
+    color: #fff;
+}
+
+.store-bottom-nav {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(23, 63, 58, 0.08);
+    box-shadow: 0 14px 30px rgba(24, 57, 53, 0.1);
 }
 
 .admin-surface {
     background:
-        radial-gradient(circle at top left, rgba(247, 226, 181, 0.55), transparent 28%),
-        linear-gradient(180deg, #fffaf0 0%, #f9edd4 100%);
+        linear-gradient(180deg, #fff8eb 0%, #f5e5bf 100%);
 }
 
-.grain-card {
-    background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.65), transparent 40%),
-        #ffffff;
+.admin-shell {
+    background: #fffdf8;
+    border: 1px solid rgba(23, 63, 58, 0.08);
+    box-shadow: 0 20px 40px rgba(24, 57, 53, 0.08);
 }
 
-.mobile-shell {
-    background:
-        radial-gradient(circle at bottom, rgba(247, 226, 181, 0.35), transparent 32%),
-        #fffaf0;
+.admin-sidebar {
+    background: #123c36;
 }
 
-.card-soft {
-    border: 1px solid rgba(18, 61, 55, 0.08);
-    background: #fffdf9;
-    box-shadow: 0 16px 36px rgba(47, 93, 87, 0.08);
+.admin-sidebar-card {
+    background: rgba(255, 255, 255, 0.08);
 }
 
-.pill-soft {
-    border: 1px solid rgba(18, 61, 55, 0.12);
-    background: rgba(255,255,255,0.8);
+.admin-nav-item {
+    border-radius: 18px;
 }
 
-.nav-soft {
-    background: rgba(255,255,255,0.94);
-    border: 1px solid rgba(18, 61, 55, 0.10);
-    box-shadow: 0 12px 30px rgba(47, 93, 87, 0.10);
+.admin-nav-item-active {
+    background: #f7e4bb;
+    color: #163c36;
+}
+
+.admin-panel {
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(23, 63, 58, 0.08);
+    box-shadow: 0 16px 30px rgba(24, 57, 53, 0.06);
+}
+
+.admin-stat-card {
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(23, 63, 58, 0.08);
+    box-shadow: 0 14px 30px rgba(24, 57, 53, 0.06);
+}
+
+.admin-input,
+.admin-select,
+.admin-textarea {
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid rgba(23, 63, 58, 0.12);
+    background: #fffefb;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #173f3a;
+    outline: none;
+}
+
+.admin-input:focus,
+.admin-select:focus,
+.admin-textarea:focus {
+    border-color: #214943;
+    box-shadow: 0 0 0 3px rgba(33, 73, 67, 0.08);
+}
+
+.btn-primary-soft {
+    border-radius: 18px;
+    background: #214943;
+    color: #fff;
+    font-weight: 700;
+}
+
+.btn-secondary-soft {
+    border-radius: 18px;
+    border: 1px solid rgba(23, 63, 58, 0.12);
+    background: #fffefb;
+    color: #173f3a;
+    font-weight: 700;
 }
 
 ::-webkit-scrollbar {

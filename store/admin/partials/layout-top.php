@@ -16,9 +16,9 @@ require __DIR__ . '/../../partials/header.php';
 ?>
 <main class="admin-surface min-h-screen">
     <div class="mx-auto grid min-h-screen max-w-[1600px] xl:grid-cols-[280px_1fr]">
-        <aside class="hidden border-r border-brand-200 bg-[#163933] text-white xl:block">
+        <aside class="admin-sidebar hidden border-r border-brand-200 text-white xl:block">
             <div class="sticky top-0 p-6">
-                <div class="rounded-3xl bg-white/5 p-5">
+                <div class="admin-sidebar-card rounded-[28px] p-5">
                     <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-100">JasaJoki Admin</p>
                     <h1 class="mt-3 text-2xl font-bold">Panel Operasional</h1>
                     <p class="mt-2 text-sm text-slate-300">Desktop-first untuk kelola produk, order, dan konfigurasi bisnis.</p>
@@ -26,14 +26,14 @@ require __DIR__ . '/../../partials/header.php';
 
                 <nav class="mt-6 space-y-2">
                     <?php foreach ($adminNav as $item): ?>
-                        <a href="<?= e($item['href']) ?>" class="flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-semibold <?= $activeNav === $item['key'] ? 'bg-brand-100 text-accent-900' : 'text-brand-100 hover:bg-white/5 hover:text-white' ?>">
+                        <a href="<?= e($item['href']) ?>" class="admin-nav-item flex items-center justify-between px-4 py-3 text-sm font-semibold <?= $activeNav === $item['key'] ? 'admin-nav-item-active' : 'text-brand-100 hover:bg-white/5 hover:text-white' ?>">
                             <span><?= e($item['label']) ?></span>
                             <?php if ($activeNav === $item['key']): ?><span>•</span><?php endif; ?>
                         </a>
                     <?php endforeach; ?>
                 </nav>
 
-                <div class="mt-8 rounded-3xl bg-white/5 p-5 text-sm text-slate-300">
+                <div class="admin-sidebar-card mt-8 rounded-[28px] p-5 text-sm text-slate-300">
                     <div class="font-semibold text-white"><?= e($adminUsername) ?></div>
                     <div class="mt-1">Mode operasional aktif</div>
                     <a href="<?= e(route_url('admin/logout.php')) ?>" class="mt-4 inline-flex rounded-2xl bg-white px-4 py-2 font-semibold text-slate-950">Logout</a>
@@ -42,13 +42,13 @@ require __DIR__ . '/../../partials/header.php';
         </aside>
 
         <section class="p-4 md:p-6 xl:p-8">
-            <header class="mb-6 flex flex-col gap-4 rounded-[30px] border border-brand-200 bg-[#fffdf8] p-5 shadow-soft md:flex-row md:items-center md:justify-between">
+            <header class="admin-shell mb-6 flex flex-col gap-4 rounded-[32px] p-5 md:flex-row md:items-center md:justify-between">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent-600">Admin workspace</p>
                     <h2 class="mt-2 text-[28px] font-black text-accent-900"><?= e($pageTitle) ?></h2>
                 </div>
                 <div class="flex flex-wrap gap-3">
-                    <a href="<?= e(route_url()) ?>" class="rounded-2xl border border-brand-200 bg-white px-4 py-3 text-sm font-semibold text-accent-700">Lihat Store</a>
-                    <a href="<?= e(route_url('admin/security.php')) ?>" class="rounded-2xl border border-brand-200 bg-white px-4 py-3 text-sm font-semibold text-accent-700">Keamanan</a>
+                    <a href="<?= e(route_url()) ?>" class="btn-secondary-soft px-4 py-3 text-sm">Lihat Store</a>
+                    <a href="<?= e(route_url('admin/security.php')) ?>" class="btn-secondary-soft px-4 py-3 text-sm">Keamanan</a>
                 </div>
             </header>
