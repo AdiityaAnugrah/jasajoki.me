@@ -49,7 +49,7 @@ require __DIR__ . '/partials/header.php';
 <div class="min-h-screen">
 <main class="store-container px-5 pb-10 pt-5 md:px-7 lg:px-8">
     <section class="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
-        <div class="section-card p-5 md:p-7">
+        <div class="section-card interactive-panel p-5 md:p-7">
             <p class="eyebrow text-[11px] font-semibold">Invoice pembayaran</p>
             <h1 class="title-display mt-4 text-[34px] leading-[0.95] text-[#171411] md:text-[50px]">Scan QR dan pantau status transaksi secara real-time.</h1>
             <p class="store-muted mt-4 text-sm leading-7">Begitu pembayaran terdeteksi, status order akan ikut berubah otomatis.</p>
@@ -91,7 +91,7 @@ require __DIR__ . '/partials/header.php';
             </div>
         </div>
 
-        <div class="section-card p-5 md:p-7">
+        <div class="section-card interactive-panel p-5 md:p-7">
             <?php if ($order): ?>
                 <div class="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
                     <div class="info-block p-4 text-center">

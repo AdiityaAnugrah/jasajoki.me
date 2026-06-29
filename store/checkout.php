@@ -83,7 +83,7 @@ require __DIR__ . '/partials/header.php';
     <a href="<?= e(route_url('product.php?slug=' . $product['slug'])) ?>" class="subtle-link text-sm font-semibold">Kembali ke detail produk</a>
 
     <section class="mt-4 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <div class="section-card p-5 md:p-7">
+        <div class="section-card interactive-panel p-5 md:p-7">
             <p class="eyebrow text-[11px] font-semibold">Checkout summary</p>
             <h1 class="title-display mt-4 text-[34px] leading-[0.95] text-[#171411] md:text-[50px]">Review pesananmu sebelum lanjut ke pembayaran.</h1>
             <p class="store-muted mt-4 text-sm leading-7">Semua data sudah kami siapkan. Lanjutkan ke invoice untuk scan QRIS dan pantau status transaksi.</p>
@@ -115,7 +115,7 @@ require __DIR__ . '/partials/header.php';
             </div>
         </div>
 
-        <div class="section-card p-5 md:p-7">
+        <div class="section-card interactive-panel p-5 md:p-7">
             <p class="eyebrow text-[11px] font-semibold">Payment status</p>
             <h2 class="mt-3 text-2xl font-semibold text-[#171411]">QRISify QRIS</h2>
             <div class="mt-4 rounded-[24px] <?= ($qrisifyResponse['success'] ?? false) ? 'bg-[#171411] text-[#f8f4ed]' : 'bg-white/70 text-[#171411]' ?> p-4 text-sm leading-6">

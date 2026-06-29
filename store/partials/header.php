@@ -61,7 +61,7 @@ $pageTitle = $pageTitle ?? app_config()['app_name'];
             <nav class="site-nav">
                 <a href="<?= e(route_url('index.php')) ?>" class="site-nav-link">Store</a>
                 <a href="<?= e(app_setting('store_whatsapp') ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', (string) app_setting('store_whatsapp')) : '#') ?>" class="site-nav-link">WhatsApp</a>
-                <a href="<?= e(route_url('admin/login.php')) ?>" class="site-nav-ghost">Admin</a>
+                <a href="#catalog" class="site-nav-ghost">Produk</a>
             </nav>
         </div>
     </div>

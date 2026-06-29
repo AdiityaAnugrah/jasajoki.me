@@ -16,7 +16,9 @@ require __DIR__ . '/partials/header.php';
         </section>
     <?php endif; ?>
 
-    <section class="section-card overflow-hidden p-5 md:p-8 lg:p-10">
+    <section class="section-card interactive-panel overflow-hidden p-5 md:p-8 lg:p-10">
+        <span class="floating-orb orb-a"></span>
+        <span class="floating-orb orb-b"></span>
         <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
             <div>
                 <p class="eyebrow text-[11px] font-semibold">Minimal storefront</p>
@@ -38,6 +40,11 @@ require __DIR__ . '/partials/header.php';
                     <div class="mt-3 text-lg font-semibold text-[#171411]">Pilih produk → isi data → scan QRIS → ambil file akun.</div>
                 </div>
             </div>
+        </div>
+        <div class="mt-8 grid gap-3 md:grid-cols-3">
+            <div class="store-chip justify-center px-4 py-3 text-sm font-semibold">Pembayaran QRIS real-time</div>
+            <div class="store-chip justify-center px-4 py-3 text-sm font-semibold">Auto delivery data akun</div>
+            <div class="store-chip justify-center px-4 py-3 text-sm font-semibold">Desain mobile-first yang lebih hidup</div>
         </div>
     </section>
 

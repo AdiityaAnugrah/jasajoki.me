@@ -21,7 +21,7 @@ require __DIR__ . '/partials/header.php';
     <a href="<?= e(route_url()) ?>" class="subtle-link text-sm font-semibold">Kembali ke store</a>
 
     <section class="mt-4 grid gap-6 xl:grid-cols-[1fr_0.95fr]">
-        <div class="section-card overflow-hidden p-3">
+        <div class="section-card interactive-panel overflow-hidden p-3">
             <?php if (!empty($product['image_url'])): ?>
                 <img src="<?= e($product['image_url']) ?>" alt="<?= e($product['name']) ?>" class="store-media !h-[260px] md:!h-[340px]">
             <?php else: ?>

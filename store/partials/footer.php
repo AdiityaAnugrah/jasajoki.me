@@ -17,7 +17,7 @@
                         <div class="text-xs font-semibold uppercase tracking-[0.18em] text-[#6d6054]">Navigasi</div>
                         <div class="mt-2 flex flex-wrap gap-2">
                             <a href="<?= e(route_url('index.php')) ?>" class="store-chip px-3 py-2 text-xs font-semibold">Katalog</a>
-                            <a href="<?= e(route_url('admin/login.php')) ?>" class="store-chip px-3 py-2 text-xs font-semibold">Admin</a>
+                            <a href="#catalog" class="store-chip px-3 py-2 text-xs font-semibold">Produk</a>
                         </div>
                     </div>
                 </div>
