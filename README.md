@@ -52,6 +52,14 @@ http://localhost/jasajoki.me/store
 - Untuk local XAMPP: gunakan `DB_CONNECTION=mysql`
 - Untuk CI GitHub Actions: workflow otomatis pakai `sqlite`
 
+## Tripay
+
+Flow yang sudah aktif:
+- create transaksi
+- simpan checkout URL / QR / pay code
+- callback update status
+- invoice refresh detail dari Tripay
+
 ## CI/CD
 
 ### CI

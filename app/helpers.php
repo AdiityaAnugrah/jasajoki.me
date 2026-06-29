@@ -97,6 +97,7 @@ function app_setting(string $key, mixed $default = null): mixed
         $fallback = [
             'store_tagline' => 'Top up, joki, dan layanan digital cepat.',
             'store_whatsapp' => '6281234567890',
+            'store_email' => app_config()['mail']['username'] ?: 'admin@jasajoki.me',
         ];
 
         return $fallback[$key] ?? $default;
@@ -261,13 +262,14 @@ function products_delete(int $id): void
 function orders_create(array $payload): string
 {
     $orderCode = 'JJ-' . date('YmdHis') . '-' . random_int(100, 999);
-    $statement = db()->prepare('INSERT INTO orders (order_code, product_id, customer_name, customer_account, customer_whatsapp, customer_notes, amount, payment_channel, payment_status, order_status, tripay_reference)
-        VALUES (:order_code, :product_id, :customer_name, :customer_account, :customer_whatsapp, :customer_notes, :amount, :payment_channel, :payment_status, :order_status, :tripay_reference)');
+    $statement = db()->prepare('INSERT INTO orders (order_code, product_id, customer_name, customer_email, customer_account, customer_whatsapp, customer_notes, amount, payment_channel, payment_status, order_status, tripay_reference)
+        VALUES (:order_code, :product_id, :customer_name, :customer_email, :customer_account, :customer_whatsapp, :customer_notes, :amount, :payment_channel, :payment_status, :order_status, :tripay_reference)');
 
     $statement->execute([
         'order_code' => $orderCode,
         'product_id' => (int) $payload['product_id'],
         'customer_name' => trim((string) $payload['customer_name']),
+        'customer_email' => trim((string) ($payload['customer_email'] ?? '')),
         'customer_account' => trim((string) $payload['customer_account']),
         'customer_whatsapp' => trim((string) $payload['customer_whatsapp']),
         'customer_notes' => trim((string) ($payload['customer_notes'] ?? '')),
@@ -279,6 +281,72 @@ function orders_create(array $payload): string
     ]);
 
     return $orderCode;
+}
+
+function order_update_tripay_data(string $orderCode, array $data): void
+{
+    $statement = db()->prepare('UPDATE orders
+        SET tripay_reference = :tripay_reference,
+            payment_channel = :payment_channel,
+            payment_status = :payment_status,
+            tripay_checkout_url = :tripay_checkout_url,
+            tripay_pay_code = :tripay_pay_code,
+            tripay_pay_url = :tripay_pay_url,
+            tripay_qr_url = :tripay_qr_url,
+            tripay_qr_string = :tripay_qr_string,
+            expired_time = :expired_time
+        WHERE order_code = :order_code');
+
+    $statement->execute([
+        'order_code' => $orderCode,
+        'tripay_reference' => $data['tripay_reference'] ?? null,
+        'payment_channel' => $data['payment_channel'] ?? null,
+        'payment_status' => $data['payment_status'] ?? 'UNPAID',
+        'tripay_checkout_url' => $data['tripay_checkout_url'] ?? null,
+        'tripay_pay_code' => $data['tripay_pay_code'] ?? null,
+        'tripay_pay_url' => $data['tripay_pay_url'] ?? null,
+        'tripay_qr_url' => $data['tripay_qr_url'] ?? null,
+        'tripay_qr_string' => $data['tripay_qr_string'] ?? null,
+        'expired_time' => $data['expired_time'] ?? null,
+    ]);
+}
+
+function order_update_status_by_reference(string $merchantRef, string $tripayReference, string $paymentStatus): void
+{
+    $orderStatus = match ($paymentStatus) {
+        'PAID' => 'PAID',
+        'EXPIRED' => 'EXPIRED',
+        'FAILED' => 'FAILED',
+        'REFUND' => 'REFUND',
+        default => 'PENDING',
+    };
+
+    $statement = db()->prepare('UPDATE orders
+        SET payment_status = :payment_status,
+            order_status = :order_status,
+            tripay_reference = :tripay_reference
+        WHERE order_code = :order_code');
+
+    $statement->execute([
+        'payment_status' => $paymentStatus,
+        'order_status' => $orderStatus,
+        'tripay_reference' => $tripayReference,
+        'order_code' => $merchantRef,
+    ]);
+}
+
+function payment_log_create(?int $orderId, string $source, string $payload): void
+{
+    if (!$orderId) {
+        return;
+    }
+
+    $statement = db()->prepare('INSERT INTO payment_logs (order_id, source, payload_json) VALUES (:order_id, :source, :payload_json)');
+    $statement->execute([
+        'order_id' => $orderId,
+        'source' => $source,
+        'payload_json' => $payload,
+    ]);
 }
 
 function order_find_by_code(string $orderCode): ?array

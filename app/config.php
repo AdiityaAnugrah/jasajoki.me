@@ -52,8 +52,19 @@ return [
         'api_key' => env_value('TRIPAY_API_KEY', ''),
         'private_key' => env_value('TRIPAY_PRIVATE_KEY', ''),
         'merchant_code' => env_value('TRIPAY_MERCHANT_CODE', ''),
+        'mode' => env_value('TRIPAY_MODE', 'sandbox'),
+        'payment_method' => env_value('TRIPAY_PAYMENT_METHOD', 'QRIS'),
         'sandbox' => filter_var(env_value('TRIPAY_SANDBOX', 'true'), FILTER_VALIDATE_BOOL),
         'callback_url' => env_value('TRIPAY_CALLBACK_URL', '/store/callback-tripay.php'),
         'return_url' => env_value('TRIPAY_RETURN_URL', '/store/invoice.php'),
+    ],
+    'mail' => [
+        'username' => env_value('EMAIL_USER', ''),
+        'password' => env_value('EMAIL_PASS', ''),
+        'host' => env_value('SMTP_HOST', ''),
+        'port' => (int) env_value('SMTP_PORT', 465),
+    ],
+    'store' => [
+        'warranty_hours' => (int) env_value('STORE_WARRANTY_HOURS', 24),
     ],
 ];

@@ -6,6 +6,7 @@ if (is_post() && app_is_installed()) {
     settings_upsert([
         'store_tagline' => (string) request_post('store_tagline'),
         'store_whatsapp' => (string) request_post('store_whatsapp'),
+        'store_email' => (string) request_post('store_email'),
     ]);
 
     flash('success', 'Pengaturan store berhasil disimpan.');
@@ -51,11 +52,34 @@ require __DIR__ . '/../partials/header.php';
                         <input name="store_whatsapp" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm" value="<?= e(app_setting('store_whatsapp')) ?>">
                     </div>
                     <div>
+                        <label class="mb-2 block font-semibold">Email Store</label>
+                        <input name="store_email" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm" value="<?= e(app_setting('store_email')) ?>">
+                    </div>
+                    <div>
                         <label class="mb-2 block font-semibold">Tagline</label>
                         <textarea name="store_tagline" class="min-h-[110px] w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm"><?= e(app_setting('store_tagline')) ?></textarea>
                     </div>
                     <button type="submit" class="rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white" <?= !app_is_installed() ? 'disabled' : '' ?>>Simpan pengaturan</button>
                 </form>
+            </div>
+        </div>
+        <div class="mt-6 grid gap-6 lg:grid-cols-2">
+            <div class="rounded-3xl border border-slate-100 p-5">
+                <h2 class="text-lg font-bold">Tripay aktif</h2>
+                <dl class="mt-4 space-y-3 text-sm">
+                    <div class="flex justify-between gap-4"><dt>Mode</dt><dd><?= e(strtoupper($tripay['mode'] ?? ($tripay['sandbox'] ? 'sandbox' : 'production'))) ?></dd></div>
+                    <div class="flex justify-between gap-4"><dt>Method default</dt><dd><?= e($tripay['payment_method'] ?? 'QRIS') ?></dd></div>
+                    <div class="flex justify-between gap-4"><dt>Merchant Code</dt><dd><?= e($tripay['merchant_code'] ?: 'Kosong') ?></dd></div>
+                </dl>
+            </div>
+            <div class="rounded-3xl border border-slate-100 p-5">
+                <h2 class="text-lg font-bold">Email / SMTP</h2>
+                <dl class="mt-4 space-y-3 text-sm">
+                    <div class="flex justify-between gap-4"><dt>SMTP Host</dt><dd><?= e(app_config()['mail']['host'] ?: '-') ?></dd></div>
+                    <div class="flex justify-between gap-4"><dt>SMTP Port</dt><dd><?= e((string) app_config()['mail']['port']) ?></dd></div>
+                    <div class="flex justify-between gap-4"><dt>Email User</dt><dd><?= e(app_config()['mail']['username'] ?: '-') ?></dd></div>
+                    <div class="flex justify-between gap-4"><dt>Garansi</dt><dd><?= e((string) app_config()['store']['warranty_hours']) ?> jam</dd></div>
+                </dl>
             </div>
         </div>
     </div>

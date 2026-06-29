@@ -38,6 +38,10 @@ require __DIR__ . '/partials/header.php';
                 <input type="text" name="customer_name" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500" placeholder="Nama kamu" required>
             </div>
             <div>
+                <label class="mb-2 block text-sm font-semibold">Email</label>
+                <input type="email" name="customer_email" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500" placeholder="nama@email.com" required>
+            </div>
+            <div>
                 <label class="mb-2 block text-sm font-semibold">UID / Username Akun</label>
                 <input type="text" name="customer_account" class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500" placeholder="Masukkan UID atau username" required>
             </div>

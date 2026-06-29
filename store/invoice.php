@@ -1,8 +1,30 @@
 <?php
-require_once __DIR__ . '/../app/helpers.php';
+require_once __DIR__ . '/../app/tripay.php';
 
 $orderCode = (string) request_get('code', 'DEMO-001');
 $order = app_is_installed() ? order_find_by_code($orderCode) : null;
+
+if ($order && !empty($order['tripay_reference']) && tripay_has_credentials()) {
+    $detail = tripay_detail_transaction($order['tripay_reference']);
+
+    if (($detail['success'] ?? false) && !empty($detail['data'])) {
+        $tripayData = $detail['data'];
+        order_update_tripay_data($orderCode, [
+            'tripay_reference' => $tripayData['reference'] ?? $order['tripay_reference'],
+            'payment_channel' => $tripayData['payment_method_code'] ?? $order['payment_channel'],
+            'payment_status' => $tripayData['status'] ?? $order['payment_status'],
+            'tripay_checkout_url' => $tripayData['checkout_url'] ?? $order['tripay_checkout_url'],
+            'tripay_pay_code' => $tripayData['pay_code'] ?? $order['tripay_pay_code'],
+            'tripay_pay_url' => $tripayData['pay_url'] ?? $order['tripay_pay_url'],
+            'tripay_qr_url' => $tripayData['qr_url'] ?? $order['tripay_qr_url'],
+            'tripay_qr_string' => $tripayData['qr_string'] ?? $order['tripay_qr_string'],
+            'expired_time' => $tripayData['expired_time'] ?? $order['expired_time'],
+        ]);
+        order_update_status_by_reference($orderCode, $tripayData['reference'] ?? $order['tripay_reference'], strtoupper((string) ($tripayData['status'] ?? $order['payment_status'])));
+        $order = order_find_by_code($orderCode);
+    }
+}
+
 $pageTitle = 'Invoice ' . $orderCode;
 require __DIR__ . '/partials/header.php';
 ?>
@@ -27,9 +49,34 @@ require __DIR__ . '/partials/header.php';
         <?php if ($order): ?>
             <div class="mt-4 rounded-2xl border border-slate-100 p-4 text-sm text-slate-600">
                 <div><strong>Nama:</strong> <?= e($order['customer_name']) ?></div>
+                <div class="mt-1"><strong>Email:</strong> <?= e($order['customer_email'] ?? '-') ?></div>
                 <div class="mt-1"><strong>Account:</strong> <?= e($order['customer_account']) ?></div>
                 <div class="mt-1"><strong>WhatsApp:</strong> <?= e($order['customer_whatsapp']) ?></div>
             </div>
+
+            <?php if (!empty($order['tripay_qr_url'])): ?>
+                <div class="mt-4 rounded-2xl border border-slate-100 p-4 text-center">
+                    <div class="mb-3 text-sm font-semibold text-slate-700">Scan QR untuk bayar</div>
+                    <img src="<?= e($order['tripay_qr_url']) ?>" alt="QRIS" class="mx-auto w-full max-w-[260px] rounded-2xl border border-slate-100">
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($order['tripay_pay_code'])): ?>
+                <div class="mt-4 rounded-2xl border border-slate-100 p-4 text-sm text-slate-700">
+                    <div class="text-xs uppercase tracking-[0.2em] text-slate-400">Kode Bayar / VA</div>
+                    <div class="mt-2 text-xl font-extrabold"><?= e($order['tripay_pay_code']) ?></div>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($order['tripay_checkout_url'])): ?>
+                <a href="<?= e($order['tripay_checkout_url']) ?>" target="_blank" class="mt-4 inline-flex w-full justify-center rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Buka Checkout Tripay</a>
+            <?php endif; ?>
+
+            <?php if (!empty($order['expired_time'])): ?>
+                <div class="mt-4 text-sm text-slate-500">
+                    Berlaku sampai: <strong><?= e(date('d M Y H:i', (int) $order['expired_time'])) ?></strong>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
     </section>
 </main>

@@ -28,6 +28,24 @@ if ($schema === false) {
 
 $pdo->exec($schema);
 
+$orderColumns = [
+    'customer_email' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'VARCHAR(150) NULL',
+    'tripay_checkout_url' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'TEXT NULL',
+    'tripay_pay_code' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'VARCHAR(150) NULL',
+    'tripay_pay_url' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'TEXT NULL',
+    'tripay_qr_url' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'TEXT NULL',
+    'tripay_qr_string' => db_driver() === 'sqlite' ? 'TEXT NULL' : 'LONGTEXT NULL',
+    'expired_time' => db_driver() === 'sqlite' ? 'INTEGER NULL' : 'BIGINT NULL',
+];
+
+foreach ($orderColumns as $column => $definition) {
+    try {
+        $pdo->query("SELECT $column FROM orders LIMIT 1");
+    } catch (Throwable $exception) {
+        $pdo->exec("ALTER TABLE orders ADD COLUMN $column $definition");
+    }
+}
+
 if ((int) $pdo->query('SELECT COUNT(*) FROM admins')->fetchColumn() === 0) {
     $statement = $pdo->prepare('INSERT INTO admins (username, password_hash, full_name) VALUES (:username, :password_hash, :full_name)');
     $statement->execute([
@@ -67,6 +85,7 @@ if ((int) $pdo->query('SELECT COUNT(*) FROM products')->fetchColumn() === 0) {
 settings_upsert([
     'store_tagline' => 'Top up, joki, dan layanan digital cepat.',
     'store_whatsapp' => '6281234567890',
+    'store_email' => app_config()['mail']['username'] ?: 'admin@jasajoki.me',
 ]);
 
 echo 'Setup selesai menggunakan driver: ' . $driver . PHP_EOL;
